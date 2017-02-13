@@ -53,8 +53,6 @@ def home():
     return render_template('index.html', keys=db['activeKeys']['keys'])
 
 
-# www.linkedin.com/hp/update/6217341335679037440
-
 @app.route('/GETkey/<key>')
 def GETkey( key ):
     
