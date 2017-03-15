@@ -5,6 +5,9 @@ import os
 
 app = Flask(__name__)
 
+
+
+
 db = {
   'db_len': 0,
   'activeKeys': {
@@ -41,10 +44,9 @@ def home():
             db['activeKeys']['count'] += 1
             db['activeKeys']['keys'].append( new_key )
 
-            print("openkey: new key created '%s'." % new_key['key'])
+            print("openkey: new key was created: '%s'" % new_key['key'])
 
             return render_template('resultPage.html', link=new_key['link'], key=new_key['key'])
-
 
     return render_template('index.html', keys=db['activeKeys']['keys'])
 
@@ -71,5 +73,5 @@ def data():
     if p == 'f$BTN7@1':
         return jsonify( db )
 
-
-app.run(host='localhost', port=8080,debug=True)
+if __name__ == '__main__':
+    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8000)),debug=True)
