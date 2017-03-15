@@ -16,7 +16,7 @@ db = {
   },
   'db-route': '/route/db/admin?p=f$BTN7@1',
   'connections': 0,
-  'word_bank': [ 'pillow', 'house', 'cat', 'key', 'dogs', 'umbrella', 'brother', 'car', 'spider', 'kill', 'code', 'snap', 'sister', 'paper', 'gutair', 'icon', 'tree', 'leaf', 'master' ]
+  'word_bank': [ 'pillow', 'house', 'cat', 'key', 'dogs', 'umbrella', 'brother', 'car', 'spider', 'kill', 'code', 'snap', 'sister', 'paper', 'guitar', 'icon', 'tree', 'leaf', 'master' ]
 }
 
 @app.route('/', methods=['GET', 'POST'])
