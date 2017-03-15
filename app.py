@@ -2,11 +2,7 @@ from flask import Flask, request, jsonify, render_template, redirect
 from random import randint
 import os
 
-
 app = Flask(__name__)
-
-
-
 
 db = {
   'db_len': 0,
