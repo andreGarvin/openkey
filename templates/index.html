@@ -21,73 +21,73 @@
         </style>
     </head>
     <body>
-        
+
         <div class="navbar navbar-default navbar-static-top">
             <button id='open' class="btn btn-primary pull-left">Open key</button>
         </div>
-        
+
         <div class="container-fluid">
             <div class="row">
-                
+
                 <div class="bin col-md-5 col-xs-5">
                     <form method='POST'>
-                
+
                         <input type="text" class='form-control' name="link" placeholder='Link' />
-                
+
                         <select class="form-control" name='time'>
                             <option>5 mins</option>
                             <option>10 mins</option>
                             <option>30 mins</option>
                             <option>1 hr</option>
                         </select>
-                
+
                         <input type="submit" class='btn btn-default pull-right' value="Create key"/>
-                
+
                     </form>
                 </div>
-        
+
                 <div class="bin col-md-4 col-xs-4">
-                    
+
                     <h3>Active Keys:</h3>
-                    
+
                     {% for k in keys %}
                         <p>
                             <a id='key' class='lead' href="{{ k['link'] }}">{{ k['key'] }}</a>
                         </p>
                     {% endfor %}
-                    
+
                 </div>
-                
+
             </div>
         </div>
-        
-        
+
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script type="text/javascript">
         $(document).ready(function() {
-            
+
             $('#open').click(function() {
-                
+
                 var key = prompt('Open key: enter key.');
-                
+
                 if ( key ) {
-                    
-                    $.getJSON('https://my-projects-andregarvin.c9users.io/GETkey/' + key, function( resp ) {
-                    
-                    
+
+                    $.getJSON('/GETkey/' + key, function( resp ) {
+
+
                         if ( resp.status === null ) {
                             alert( resp.error_message );
                         }
                         else {
                             window.open( resp.key, '_blank' );
                         }
-                        
+
                     });
-                    
+
                 }
-            
+
             });
-            
+
         });
         </script>
     </body>

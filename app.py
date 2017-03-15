@@ -40,7 +40,7 @@ def home():
             db['activeKeys']['count'] += 1
             db['activeKeys']['keys'].append( new_key )
 
-            print("openkey: new key was created: '%s'" % new_key['key'])
+            print("\nopenkey: new key was created: '%s'.\n" % new_key['key'])
 
             return render_template('resultPage.html', link=new_key['link'], key=new_key['key'])
 
@@ -58,16 +58,5 @@ def GETkey( key ):
 
     return jsonify({ 'error_message': 'Key not found or is expired.', 'status': None })
 
-
-
-
-@app.route('/admin')
-def data():
-
-    p = request.args.get('p')
-
-    if p == 'f$BTN7@1':
-        return jsonify( db )
-
 if __name__ == '__main__':
-    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8000)),debug=True)
+    app.run()
