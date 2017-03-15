@@ -5,6 +5,9 @@
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
         <style type="text/css">
+            .logo {
+              color: #337ab7;
+            }
             .bin {
                 background-color: #fff;
                 border: 1px solid #ddd;
@@ -23,6 +26,7 @@
     <body>
 
         <div class="navbar navbar-default navbar-static-top">
+            <h3 class='col-md-1 col-xs-2 logo'>OpenKey</h3>
             <button id='open' class="btn btn-primary pull-left">Open key</button>
         </div>
 
@@ -52,7 +56,7 @@
 
                     {% for k in keys %}
                         <p>
-                            <a id='key' class='lead' href="{{ k['link'] }}">{{ k['key'] }}</a>
+                            <a id='key' class='lead' href="{{ k['link'] }}">{{ k['key'] }}</a>: <p>{{ k['time'] }}</p>
                         </p>
                     {% endfor %}
 

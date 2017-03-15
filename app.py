@@ -42,7 +42,7 @@ def home():
 
             print("\nopenkey: new key was created: '%s'.\n" % new_key['key'])
 
-            return render_template('resultPage.html', link=new_key['link'], key=new_key['key'])
+            return render_template('resultPage.html', link=new_key['link'], key=new_key['key'], time=new_key['time'])
 
     return render_template('index.html', keys=db['activeKeys']['keys'])
 
@@ -56,7 +56,7 @@ def GETkey( key ):
 
             return jsonify({ 'key': i['link'], 'status': True })
 
-    return jsonify({ 'error_message': 'Key not found or is expired.', 'status': None })
+    return jsonify({ 'error_message': "Key '%s' does not exist or is expired." % ( key ), 'status': None })
 
 if __name__ == '__main__':
     app.run()
