@@ -49,10 +49,11 @@ def home():
 
 @app.route('/GETkey/<key>')
 def GETkey( key ):
-
+    key = key.lower()
+    
     for i in db['activeKeys']['keys']:
 
-        if i['key'] == key:
+        if i['key'].lower() == key:
 
             return jsonify({ 'key': i['link'], 'status': True })
 
