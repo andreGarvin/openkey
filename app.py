@@ -118,7 +118,6 @@ def home():
 
 @app.route('/GETkey/<key>', methods=['GET', 'POST'])
 def GETkey( key ):
-
     if request.method === 'POST':
         for i in db['activeKeys']['keys']:
 
@@ -136,6 +135,7 @@ def GETkey( key ):
                 return redirect()
 
             return jsonify({ 'error_message': "Key '%s' does not exist or is expired." % ( key ), 'status': None })
+
 
 if __name__ == '__main__':
     app.run()
