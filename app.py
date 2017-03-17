@@ -12,11 +12,13 @@ db = loads( open('db.json', 'r').read() )
 
 # check url function
 def check_url( url ):
+    
     """
         this function checks wether the url sent 
         by the user is valid or does nopt leasd to a 
         broken url
     """
+    
     try:
         req = requests.get( url )
 
@@ -31,9 +33,11 @@ def check_url( url ):
 
 
 def post_key( post_data ):
+    
     """
         posts a new url to the db.json file
     """
+    
     resp = check_url( post_data['link'] )
     
     if resp['status'] == True:
@@ -56,19 +60,18 @@ def post_key( post_data ):
     else:
         
         return render_template('index.html', keys='')
-    
+
+
+  
 def find_key( method, key ):
     
     key = key.lower()
     
     result = None
     
-    print( key )
-    
     for i in db['activeKeys']['keys']:
         
         if i['key'].lower() == key:
-            print 'Y'
             result = { 'key': i['link'], 'status': True }
 
     
@@ -89,6 +92,8 @@ def find_key( method, key ):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     
+    print( request.values )
+    
     if request.method == 'POST':
 
         if len( request.form['link'] ) != 0:
@@ -105,7 +110,6 @@ def home():
 
 
 
-# work on this route later at home
 @app.route('/<key>', methods=['GET', 'POST'])
 def GETkey( key ):
     
@@ -119,4 +123,18 @@ def GETkey( key ):
 
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=True)
+
+"""
+<form method='POST' action="https://openkey.herokuapp.com/">
+    <input type="text" name='link' value='https://www.google.com'>
+    <select class="form-control" name="time">
+                            <option>5 mins</option>
+                            <option>10 mins</option>
+                            <option>30 mins</option>
+                            <option>1 hr</option>
+                        </select>
+    <input type="submit" class="btn btn-default pull-right" value="Create key">
+  </form>  
+"""
