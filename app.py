@@ -20,10 +20,10 @@ def check_url( url ):
     """
     def shceme( url ):
         return url[0:5].split(':')[0]
-    
+
     try:
         req = requests.get( url )
-        
+
         if req.status_code == 200:
 
             return { 'proto': shceme( url ), 'status': True, 'msg': 'url OK' }
@@ -41,7 +41,7 @@ def post_key( post_data ):
     resp = check_url( post_data['link'] )
 
     if resp['status'] == True:
-        
+
         post_data['proto'] = resp['proto']
         post_data['key'] = db['word_bank'][randint(0, len( db['word_bank'] )  - 1 )]
 
@@ -54,14 +54,14 @@ def post_key( post_data ):
         db['activeKeys']['keys'].append( post_data )
 
         print("\nopenkey: new key was created: '%s'.\n" % post_data['key'])
-        
+
         # open('db.json', 'w').write( dumps( db ) )
         print( db )
-        
+
         return render_template('resultPage.html', link=post_data['link'], key=post_data['key'], time=post_data['time'], proto=post_data['proto'])
-    
+
     else:
-        
+
         return redirect(url_for('home'))
 
 
@@ -129,5 +129,5 @@ def GETkey( key ):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=False)
+    app.run()
+    # app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=False)
