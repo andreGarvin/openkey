@@ -2,56 +2,22 @@
 <html>
     <head>
         <title>OpenKey</title>
-        <!-- Latest compiled and minified CSS -->
+        <link rel="icon" href="http://www.iconsdb.com/icons/preview/royal-blue/key-xxl.png" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-        <style type="text/css">
-            .navbar {
-                margin-bottom: 0px;
-                border-bottom: 2px solid #92cdff;
-            }
-            .logo {
-                font-size: 40px;
-                color: #92cdff;
-            }
-            .bin {
-                background-color: #fff;
-                border: 2px dashed #ddd;
-                border-radius: 2px;
-                padding: 20px;
-                margin: 40px 0px 0px 60px;
-            }
-            input {
-                border: 1px dashed #ddd;
-            }
-            .bin .form-control {
-                margin: 20px 0px 20px 0px;
-            }
-            .CTA {
-                background-color: #92cdff;
-                border-color: #fff;
-                margin-right: 10px;
-                margin-top: 10px;
-                color: #fff;
-            }
-            .btn-default {
-                margin-top: 20px;
-                margin-right: 20px;
-            }
-            #feedback {
-                margin-top: 10px;
-                cursor: pointer;
-                color: #337ab7;
-            }
-            #feedback:hover {
-                text-decoration: underline;
-            }
-        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" type="text/css" />
     </head>
     <body>
 
         <div class="navbar navbar-static-top">
-            <h3 class='col-md-1 col-xs-2 logo'>OpenKey</h3>
-            <!--<button id='open' class="CTA btn btn-primary pull-right">Open key</button>-->
+            <h3 class='col-md-1 col-xs-2 logo'>
+                <strong>
+                    <a href="/">
+                        OpenKey
+                    </a>
+                </strong>
+            </h3>
+            <button class="btn btn-default pull-right">about</button>
+            <button id='open' class="CTA btn btn-primary pull-right">Open key</button>
         </div>
         
         <div class="container-fluid">
@@ -59,7 +25,7 @@
             <div class="row">
                 
                 <div class="bin col-md-5 col-xs-9 col-sm-6 col-xs-offset-3 col-md-offset-3">
-                    <h3 class="text-left">Share your link</h3>
+                    <h2 class="text-left">Share your link</h2>
                     <form method='POST' action='{{ url_for("home") }}'>
 
                         <input type="text" class='form-control' name="link" placeholder='url' />
@@ -74,30 +40,39 @@
                         <input type="submit" class='CTA btn btn-default pull-right' value="Create key"/>
 
                     </form>
+                    
+                    <p id='feedback' class="pull-left">feedback</p>
                 </div>
                 
-                <p id='feedback' class="lead col-xs-3 col-md-3 col-xs-offset-7 col-md-offset-4 col-sm-offset-4">
-                    feedeback
-                </p>
                 
-                <!--{% if keys == '' %}-->
-                <!--<div class="bin col-md-4 col-xs-4">-->
+                {% if keys != '' %}
+                    <div style='border: 2px dashed #ddd' class="bin col-md-5 col-xs-5 row">
 
-                <!--    <h3>Active Keys:</h3>-->
+                        <h2 class='text-center'>Active Keys</h2>
 
-                <!--    {% for k in keys %}-->
-                <!--        <p>-->
-                <!--            <a id='key' class='lead' href="{{ k['link'] }}">{{ k['key'] }}</a>: <p>{{ k['time'] }}</p>-->
-                <!--        </p>-->
-                <!--    {% endfor %}-->
+                        {% for k in keys %}
+                            <a class='lead' href="{{ k['link'] }}">
+                                <div id='key' class="col-xs-5 col-md-5 col-xs-offset-1 col-md-offset-1">
+                                    <p class='lead pull-right'>{{ k['time'] }}</p>
+                                    <h3>
+                                        <strong>{{ k['key'] }}</strong>
+                                    </h3>
+                                    <p style='color: #2ecb71' class='lead'>{{ k['proto'] }}</p>
+                                </div>
+                            </a>
+                        {% endfor %}
 
-                <!--</div>-->
-                <!--{% endif %}-->
+                    </div>
+                {% else %}
+                    <div style='border-bottom: 2px dashed #ddd' class="col-xs-3 col-md-3 col-xs-offset-2 col-md-offset-2">
+                        <h2 class='text-center'>No Active keys </h2>
+                    </div>
+                {% endif %}
+                
                 
             </div>
         </div>
-
-        <button class="btn btn-default pull-right">about</button>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript">

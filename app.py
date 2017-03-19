@@ -10,8 +10,11 @@ app = Flask(__name__)
 db = loads( open('db.json', 'r').read() )
 
 
+
 # check url function
 def check_url( url ):
+    
+    from urlparse import urlparse
     
     """
         this function checks wether the url sent 
@@ -23,13 +26,18 @@ def check_url( url ):
         req = requests.get( url )
 
         if req.status_code == 200:
-            return { 'status': True, 'msg': 'url OK'}
+            
+            valid = urlparse( url )
+            
+            return { 'secure': valid.shceme, 'status': True, 'msg': 'url OK'}
+
         else:
             return { 'status': False, 'msg': 'bad url/link'}
 
     except:
 
         return { 'status': None, 'msg': 'not a valid url'}
+
 
 
 def post_key( post_data ):
@@ -42,6 +50,7 @@ def post_key( post_data ):
     
     if resp['status'] == True:
         
+        post_data['proto'] = resp['secure']
         post_data['key'] = db['word_bank'][randint(0, len( db['word_bank'] )  - 1 )]
 
 
@@ -57,56 +66,58 @@ def post_key( post_data ):
         open('db.json', 'w').write( dumps( db ) )
         
         return render_template('resultPage.html', link=post_data['link'], key=post_data['key'], time=post_data['time'])
-    else:
-        
-        return render_template('index.html', keys='')
+    
+    return render_template('index.html', keys='')
 
 
-  
+
+
 def find_key( method, key ):
-    
-    key = key.lower()
-    
+
     result = None
     
     for i in db['activeKeys']['keys']:
         
-        if i['key'].lower() == key:
-            result = { 'key': i['link'], 'status': True }
+        if i['key'].lower() == key.lower():
+            result = { 'link': i['link'], 'status': True }
+            
+            if method == 'POST':
+                
+                return jsonify( result )
+    
+            elif method == 'GET': 
+                
+                return redirect( result['key'] )
+    
+    if result == None and method == 'GET':
+        
+        return jsonify({ 'error_message': "Key '%s' does not exist or is expired." % ( key ), 'status': None })
+    
+    if result == None and method == 'POST':
+        
+        return redirect(url_for('home'))
 
-    
-    if method == 'POST':
-        
-        if result == None:
-            return jsonify({ 'error_message': "Key '%s' does not exist or is expired." % ( key ), 'status': None })
-        
-        return jsonify( result )
-    
-    elif method == 'GET': 
-        
-        if result == None:
-            return redirect(url_for('home'))
-        
-        return redirect( result['key'] )
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     
-    print( request.values )
-    
     if request.method == 'POST':
-
+    
         if len( request.form['link'] ) != 0:
 
-            post_key({
+            return post_key({
                 'link': request.form['link'],
                 'time': request.form['time']
             })
     
-    if db['activeKeys']['count'] == 0:
+    elif db['activeKeys']['count'] == 0:
+        
         return render_template('index.html', keys='')
     
     return render_template('index.html', keys=db['activeKeys']['keys'])
+
 
 
 
@@ -125,16 +136,3 @@ def GETkey( key ):
 if __name__ == '__main__':
     # app.run()
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=True)
-
-"""
-<form method='POST' action="https://openkey.herokuapp.com/">
-    <input type="text" name='link' value='https://www.google.com'>
-    <select class="form-control" name="time">
-                            <option>5 mins</option>
-                            <option>10 mins</option>
-                            <option>30 mins</option>
-                            <option>1 hr</option>
-                        </select>
-    <input type="submit" class="btn btn-default pull-right" value="Create key">
-  </form>  
-"""
