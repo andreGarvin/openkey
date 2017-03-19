@@ -13,13 +13,11 @@ db = loads( open('db.json', 'r').read() )
 
 # check url function
 def check_url( url ):
-    
     """
-        this function checks wether the url sent 
-        by the user is valid or does nopt leasd to a 
+        this function checks wether the url sent
+        by the user is valid or does nopt leasd to a
         broken url
     """
-    
     def shceme( url ):
         return url[0:5].split(':')[0]
     
@@ -27,7 +25,7 @@ def check_url( url ):
         req = requests.get( url )
         
         if req.status_code == 200:
-            
+
             return { 'proto': shceme( url ), 'status': True, 'msg': 'url OK' }
     except:
         return { 'status': False, 'msg': 'not a valid url'}
@@ -35,15 +33,13 @@ def check_url( url ):
 
 
 def post_key( post_data ):
-    
+
     """
         posts a new url to the db.json file
     """
-    
+
     resp = check_url( post_data['link'] )
-    
-    print( resp )
-    
+
     if resp['status'] == True:
         
         post_data['proto'] = resp['proto']
@@ -74,26 +70,26 @@ def post_key( post_data ):
 def find_key( method, key ):
 
     result = None
-    
+
     for i in db['activeKeys']['keys']:
-        
+
         if i['key'].lower() == key.lower():
             result = { 'link': i['link'], 'status': True }
-            
+
             if method == 'POST':
-                
+
                 return jsonify( result )
-    
-            elif method == 'GET': 
-                
+
+            elif method == 'GET':
+
                 return redirect( result['key'] )
-    
+
     if result == None and method == 'GET':
-        
+
         return jsonify({ 'error_message': "Key '%s' does not exist or is expired." % ( key ), 'status': None })
-    
+
     if result == None and method == 'POST':
-        
+
         return redirect(url_for('home'))
 
 
@@ -101,20 +97,20 @@ def find_key( method, key ):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    
+
     if request.method == 'POST':
-    
+
         if len( request.form['link'] ) != 0:
 
             return post_key({
                 'link': request.form['link'],
                 'time': request.form['time']
             })
-    
+
     elif db['activeKeys']['count'] == 0:
-        
+
         return render_template('index.html', keys='')
-    
+
     return render_template('index.html', keys=db['activeKeys']['keys'])
 
 
@@ -122,16 +118,16 @@ def home():
 
 @app.route('/<key>', methods=['GET', 'POST'])
 def GETkey( key ):
-    
+
     resp = find_key( request.method, key )
-    
+
     if request.method == 'POST':
         return resp
-    
+
     return resp
-    
+
 
 
 if __name__ == '__main__':
     # app.run()
-    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=True)
+    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=False)
