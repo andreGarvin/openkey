@@ -14,29 +14,23 @@ db = loads( open('db.json', 'r').read() )
 # check url function
 def check_url( url ):
     
-    from urlparse import urlparse
-    
     """
         this function checks wether the url sent 
         by the user is valid or does nopt leasd to a 
         broken url
     """
     
+    def shceme( url ):
+        return url[0:5].split(':')[0]
+    
     try:
         req = requests.get( url )
-
+        
         if req.status_code == 200:
             
-            valid = urlparse( url )
-            
-            return { 'secure': valid.shceme, 'status': True, 'msg': 'url OK'}
-
-        else:
-            return { 'status': False, 'msg': 'bad url/link'}
-
+            return { 'proto': shceme( url ), 'status': True, 'msg': 'url OK' }
     except:
-
-        return { 'status': None, 'msg': 'not a valid url'}
+        return { 'status': False, 'msg': 'not a valid url'}
 
 
 
@@ -48,9 +42,11 @@ def post_key( post_data ):
     
     resp = check_url( post_data['link'] )
     
+    print( resp )
+    
     if resp['status'] == True:
         
-        post_data['proto'] = resp['secure']
+        post_data['proto'] = resp['proto']
         post_data['key'] = db['word_bank'][randint(0, len( db['word_bank'] )  - 1 )]
 
 
@@ -63,11 +59,14 @@ def post_key( post_data ):
 
         print("\nopenkey: new key was created: '%s'.\n" % post_data['key'])
         
-        open('db.json', 'w').write( dumps( db ) )
+        # open('db.json', 'w').write( dumps( db ) )
+        print( db )
         
-        return render_template('resultPage.html', link=post_data['link'], key=post_data['key'], time=post_data['time'])
+        return render_template('resultPage.html', link=post_data['link'], key=post_data['key'], time=post_data['time'], proto=post_data['proto'])
     
-    return render_template('index.html', keys='')
+    else:
+        
+        return redirect(url_for('home'))
 
 
 

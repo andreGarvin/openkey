@@ -9,14 +9,12 @@
     <body>
 
         <div class="navbar navbar-static-top">
-            <h3 class='col-md-1 col-xs-2 logo'>
+            <h3 class='col-md-2 col-xs-2'>
                 <strong>
-                    <a href="/">
-                        OpenKey
-                    </a>
+                    <a href="/" class='logo'>OpenKey<a>
                 </strong>
             </h3>
-            <button class="btn btn-default pull-right">about</button>
+            <a href='https://github.com/andreGarvin/openkey/blob/master/README.md' class="btn btn-default pull-right">about</a>
             <button id='open' class="CTA btn btn-primary pull-right">Open key</button>
         </div>
         
@@ -41,7 +39,6 @@
 
                     </form>
                     
-                    <p id='feedback' class="pull-left">feedback</p>
                 </div>
                 
                 
@@ -57,7 +54,11 @@
                                     <h3>
                                         <strong>{{ k['key'] }}</strong>
                                     </h3>
-                                    <p style='color: #2ecb71' class='lead'>{{ k['proto'] }}</p>
+                                    {% if k['proto'] == 'http' or k['proto'] == '' %}
+                                        <p style='color: #ddd' class='lead pull-right'>{{ k['proto'] }}</p>
+                                    {% else %}
+                                        <p style='color: #2ecb71' class='lead pull-right'>{{ k['proto'] }}</p>
+                                    {% endif %}
                                 </div>
                             </a>
                         {% endfor %}
@@ -97,7 +98,6 @@
                 }
 
             });
-
         });
         </script>
     </body>

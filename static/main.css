@@ -1,5 +1,5 @@
 body {
-    backround-color: #fff;
+    background-color: #fff;
 }
 .navbar {
     border-bottom: 2px solid #0c77f8;
@@ -18,7 +18,7 @@ body {
 }
 .bin {
     margin: 40px 0px 0px 60px;
-    border: 1.5px solid #ddd;
+    border: 1px solid #f2dede;
     font-family: sans-serif;
     background-color: #fff;
     border-radius: 2px;
@@ -35,9 +35,9 @@ body {
     color: #fff;
 }
 #key {
-    border-bottom: 3px solid #ddd;
-    margin-top: 10px;
-    padding: 10px;
+    border-bottom: 3px solid #efefef;
+    margin-top: 8px;
+    padding: 1px;
     color: #333;
 }
 #key:hover {
