@@ -10,7 +10,6 @@ app = Flask(__name__)
 db = loads( open('db.json', 'r').read() )
 
 
-
 # check url function
 def check_url( url ):
     """
@@ -56,7 +55,6 @@ def post_key( post_data ):
         print("\nopenkey: new key was created: '%s'.\n" % post_data['key'])
 
         # open('db.json', 'w').write( dumps( db ) )
-        print( db )
 
         return render_template('resultPage.html', link=post_data['link'], key=post_data['key'], time=post_data['time'], proto=post_data['proto'])
 
@@ -82,17 +80,15 @@ def find_key( method, key ):
 
             elif method == 'GET':
 
-                return redirect( result['key'] )
+                return redirect( result['link'] )
 
-    if result == None and method == 'GET':
-
-        return jsonify({ 'error_message': "Key '%s' does not exist or is expired." % ( key ), 'status': None })
-
-    if result == None and method == 'POST':
+    if method == 'GET':
 
         return redirect(url_for('home'))
 
+    if method == 'POST':
 
+        return jsonify({ 'error_message': "Key '%s' does not exist or is expired." % ( key ), 'status': None })
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -119,15 +115,9 @@ def home():
 @app.route('/<key>', methods=['GET', 'POST'])
 def GETkey( key ):
 
-    resp = find_key( request.method, key )
-
-    if request.method == 'POST':
-        return resp
-
-    return resp
-
+    return find_key( request.method, key )
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
     # app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=False)
