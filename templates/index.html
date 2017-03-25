@@ -17,11 +17,11 @@
             <a href='https://github.com/andreGarvin/openkey/blob/master/README.md' class="btn btn-default pull-right">about</a>
             <button id='open' class="CTA btn btn-primary pull-right">Open key</button>
         </div>
-        
+
         <div class="container-fluid">
-            
+
             <div class="row">
-                
+
                 <div class="bin col-md-5 col-xs-9 col-sm-6 col-xs-offset-3 col-md-offset-3">
                     <h2 class="text-left">Share your link</h2>
                     <form method='POST' action='{{ url_for("home") }}'>
@@ -38,10 +38,10 @@
                         <input type="submit" class='CTA btn btn-default pull-right' value="Create key"/>
 
                     </form>
-                    
+
                 </div>
-                
-                
+
+
                 {% if keys != '' %}
                     <div style='border: 2px dashed #ddd' class="bin col-md-5 col-xs-5 row">
 
@@ -49,7 +49,7 @@
 
                         {% for k in keys %}
                             <a class='lead' href="{{ k['link'] }}">
-                                <div id='key' class="col-xs-5 col-md-5 col-xs-offset-1 col-md-offset-1">
+                                <div id='key' class="col-xs-7 col-md-5 col-xs-offset-3 col-md-offset-3 col-sm-offset-2">
                                     <p class='lead pull-right'>{{ k['time'] }}</p>
                                     <h3>
                                         <strong>{{ k['key'] }}</strong>
@@ -69,11 +69,11 @@
                         <h2 class='text-center'>No Active keys </h2>
                     </div>
                 {% endif %}
-                
-                
+
+
             </div>
         </div>
-        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript">
@@ -87,13 +87,13 @@
                     axios.post('/'+key)
                         .then(function( resp ) {
                             resp = resp.data;
-                            
+                            console.log( resp );
                             if ( resp.status === true ) {
-                                window.open( resp.key );
+                                window.open( resp.link, '_blank' );
                                 return;
                             }
-                            
-                            alert( resp.error_message ); 
+
+                            alert( resp.error_message );
                         });
                 }
 
