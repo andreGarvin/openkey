@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for
 from json import loads, dumps
 from random import randint
 import requests
+import time
 import os
 
 app = Flask(__name__)
@@ -111,6 +112,7 @@ def home():
 
         return render_template('index.html', keys='')
 
+    time.sleep(3)
     return render_template('index.html', keys=db['activeKeys']['keys'])
 
 
