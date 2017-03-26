@@ -6,8 +6,6 @@ import os
 app = Flask(__name__)
 
 
-
-
 db = {
   'db_len': 0,
   'activeKeys': {
