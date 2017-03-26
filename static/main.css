@@ -1,0 +1,60 @@
+body {
+    background-color: #fff;
+}
+.navbar {
+    border-bottom: 2px solid #0c77f8;
+    margin-bottom: 50px;
+}
+.navbar .btn {
+    height: 50px;
+}
+.logo {
+    font-size: 40px;
+    color: #0c77f8;
+}
+.logo:hover {
+    text-decoration: none;
+    color: #0c77f8;
+}
+.bin {
+    margin: 40px 0px 29px 60px;
+    border: 1px solid #f2dede;
+    font-family: sans-serif;
+    background-color: #fff;
+    border-radius: 2px;
+    padding: 20px;
+}
+.bin .form-control {
+    margin: 20px 0px 20px 0px;
+}
+.CTA {
+    background-color: #0c77f8;
+    border-color: #fff;
+    margin-right: 10px;
+    margin-top: 10px;
+    color: #fff;
+}
+#key {
+    border-bottom: 3px solid #efefef;
+    margin-top: 8px;
+    padding: 1px;
+    color: #333;
+}
+#key:hover {
+    border-color: #0c77f8;
+    color: #0c77f8;
+}
+.btn-default {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.btn-default:hover {
+    border-color: #0c77f8;
+}
+#feedback {
+    text-decoration: underline;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #0c77f8;
+}

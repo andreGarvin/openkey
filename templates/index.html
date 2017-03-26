@@ -2,92 +2,102 @@
 <html>
     <head>
         <title>OpenKey</title>
-        <!-- Latest compiled and minified CSS -->
+        <link rel="icon" href="http://www.iconsdb.com/icons/preview/royal-blue/key-xxl.png" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-        <style type="text/css">
-            .bin {
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 2px;
-                padding: 20px;
-                margin: 40px 0px 0px 60px;
-            }
-            .bin .form-control {
-                margin: 20px 0px 20px 0px;
-            }
-            .btn {
-                margin: 20px;
-            }
-        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" type="text/css" />
     </head>
     <body>
-        
-        <div class="navbar navbar-default navbar-static-top">
-            <button id='open' class="btn btn-primary pull-left">Open key</button>
+
+        <div class="navbar navbar-static-top">
+            <h3 class='col-md-2 col-xs-2'>
+                <strong>
+                    <a href="/" class='logo'>OpenKey<a>
+                </strong>
+            </h3>
+            <a href='https://github.com/andreGarvin/openkey/blob/master/README.md' class="btn btn-default pull-right">about</a>
+            <button id='open' class="CTA btn btn-primary pull-right">Open key</button>
         </div>
-        
+
         <div class="container-fluid">
+
             <div class="row">
-                
-                <div class="bin col-md-5 col-xs-5">
-                    <form method='POST'>
-                
-                        <input type="text" class='form-control' name="link" placeholder='Link' />
-                
+
+                <div class="bin col-md-5 col-xs-9 col-sm-6 col-xs-offset-3 col-md-offset-3">
+                    <h2 class="text-left">Share your link</h2>
+                    <form method='POST' action='{{ url_for("home") }}'>
+
+                        <input type="text" class='form-control' name="link" placeholder='url' />
+
                         <select class="form-control" name='time'>
                             <option>5 mins</option>
                             <option>10 mins</option>
                             <option>30 mins</option>
                             <option>1 hr</option>
                         </select>
-                
-                        <input type="submit" class='btn btn-default pull-right' value="Create key"/>
-                
+
+                        <input type="submit" class='CTA btn btn-default pull-right' value="Create key"/>
+
                     </form>
+
                 </div>
-        
-                <div class="bin col-md-4 col-xs-4">
-                    
-                    <h3>Active Keys:</h3>
-                    
-                    {% for k in keys %}
-                        <p>
-                            <a id='key' class='lead' href="{{ k['link'] }}">{{ k['key'] }}</a>
-                        </p>
-                    {% endfor %}
-                    
-                </div>
-                
+
+
+                {% if keys != '' %}
+                    <div style='border: 2px dashed #ddd' class="bin col-md-5 col-xs-5 row">
+
+                        <h2 class='text-center'>Active Keys</h2>
+
+                        {% for k in keys %}
+                            <a class='lead' href="{{ k['link'] }}">
+                                <div id='key' class="col-xs-7 col-md-5 col-xs-offset-3 col-md-offset-3 col-sm-offset-2">
+                                    <p class='lead pull-right'>{{ k['time'] }}</p>
+                                    <h3>
+                                        <strong>{{ k['key'] }}</strong>
+                                    </h3>
+                                    {% if k['proto'] == 'http' or k['proto'] == '' %}
+                                        <p style='color: #ddd' class='lead pull-right'>{{ k['proto'] }}</p>
+                                    {% else %}
+                                        <p style='color: #2ecb71' class='lead pull-right'>{{ k['proto'] }}</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endfor %}
+
+                    </div>
+                {% else %}
+                    <div style='border-bottom: 2px dashed #ddd' class="col-xs-3 col-md-3 col-xs-offset-2 col-md-offset-2">
+                        <h2 class='text-center'>No Active keys </h2>
+                    </div>
+                {% endif %}
+
+
             </div>
         </div>
-        
-        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript">
         $(document).ready(function() {
-            
+
             $('#open').click(function() {
-                
+
                 var key = prompt('Open key: enter key.');
-                
+
                 if ( key ) {
-                    
-                    $.getJSON('https://my-projects-andregarvin.c9users.io/GETkey/' + key, function( resp ) {
-                    
-                    
-                        if ( resp.status === null ) {
+                    axios.post('/'+key)
+                        .then(function( resp ) {
+                            resp = resp.data;
+                            console.log( resp );
+                            if ( resp.status === true ) {
+                                window.open( resp.link, '_blank' );
+                                return;
+                            }
+
                             alert( resp.error_message );
-                        }
-                        else {
-                            window.open( resp.key, '_blank' );
-                        }
-                        
-                    });
-                    
+                        });
                 }
-            
+
             });
-            
         });
         </script>
     </body>
