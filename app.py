@@ -13,15 +13,18 @@ db = loads( open('db.json', 'r').read() )
 
 # check url function
 def check_url( url ):
+    
     """
         this function checks wether the url sent
         by the user is valid or does nopt leasd to a
         broken url
     """
+    
     def shceme( url ):
         return url[0:5].split(':')[0]
 
     try:
+        
         req = requests.get( url )
 
         if req.status_code == 200:
@@ -55,7 +58,7 @@ def post_key( post_data ):
 
         print("\nopenkey: new key was created: '%s'.\n" % post_data['key'])
 
-        # open('db.json', 'w').write( dumps( db ) )
+        open('db.json', 'w').write( dumps( db ) )
 
         return render_template('resultPage.html', link=post_data['link'], key=post_data['key'], time=post_data['time'], proto=post_data['proto'])
 
@@ -73,8 +76,10 @@ def find_key( method, key ):
     for i in db['activeKeys']['keys']:
 
         if i['key'].lower() == key.lower():
+            
             result = { 'link': i['link'], 'status': True }
-
+            print result
+            
             if method == 'POST':
 
                 return jsonify( result )
@@ -85,7 +90,7 @@ def find_key( method, key ):
 
     if method == 'GET':
 
-        return redirect(url_for('home'))
+        return redirect( url_for('home') )
 
     if method == 'POST':
 
@@ -108,7 +113,7 @@ def home():
 
         return render_template('index.html', keys='')
 
-    time.sleep(3)
+    time.sleep(2)
     return render_template('index.html', keys=db['activeKeys']['keys'])
 
 
@@ -121,5 +126,4 @@ def GETkey( key ):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    # app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=False)
+    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)),debug=True)
