@@ -13,7 +13,7 @@ const axios = require('axios')
 const mongo = require('mongodb').MongoClient
 const assert = require('assert')
 
-const PORT = 8080 || process.env.PORT
+const PORT = process.env.PORT || 8080
 const MONGO_URL = process.env.NODE_ENV === 'dev'?
     'mongodb://localhost:27017' :
     `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds163806.mlab.com:63806/openkey`
