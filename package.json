@@ -1,0 +1,30 @@
+{
+  "name": "openkey",
+  "version": "1.0.0",
+  "description": "This is a shoutkey.com replica",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "NODE_ENV='dev' nodemon .",
+    "mock-prod": "NODE_ENV='dev' node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreGarvin/openkey.git"
+  },
+  "author": "Andre Garvin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreGarvin/openkey/issues"
+  },
+  "homepage": "https://github.com/andreGarvin/openkey#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.0-rc0"
+  },
+  "devDependencies": {
+    "axios": "^0.17.1"
+  }
+}

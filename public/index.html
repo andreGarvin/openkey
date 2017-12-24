@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OpenKey</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+        <link rel="stylesheet" href="main.css" />
+    </head>
+    <body>
+
+        <div id='app'>
+            <div class="navbar navbar-static-top">
+                <h3 class='col-md-2 col-xs-2'>
+                    <strong>
+                        <a href="/" class='logo'>OpenKey<a>
+                    </strong>
+                </h3>
+                <a href='https://github.com/andreGarvin/openkey/blob/master/README.md' class="btn btn-default pull-right">about</a>
+                <button @click='fetchKey()' class="CTA btn btn-primary pull-right">Open key</button>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- <errorMesage :error='resp'> -->
+                    
+                    <div v-if='createdKey'>
+                        <div class='bin key col-md-6 col-xs-9 col-xs-offset-2 col-sm-offset-2 col-md-offset-2'>
+                            <div>
+                                <small class='lead pull-right'>
+                                    <i>Available for {{ resp.time === '1' ? '1 hour' : `${resp.time} mins` }}</i>
+                                </small>
+                            </div>
+                            <p style='font-size: 30px' lass='lead'>
+                                Your route key is: <a :href='resp.url'>{{ resp.key }}</a>
+                            </p>
+                            <p v-if="resp.proto === 'http:'" id="HTTP" style="font-size: 30px;" class="lead pull-right col-md-2 col-xs-2">{{ resp.proto }}</p>
+                            <p v-else="resp.proto === 'https:'" id="HTTPS" style="font-size: 30px;" class="lead pull-right col-md-2 col-xs-2">{{ resp.proto }}</p>
+                        </div>
+                    </div>
+                    <div v-else='!createdKey'>
+                        <div class="bin col-md-5 col-xs-8 col-sm-8 col-xs-offset-2 col-md-offset-1">
+                            <h2 class="text-left">Share your link</h2>
+                            <input type="text" class='form-control' v-model="url" placeholder='url' />
+                        
+                            <select v-model='time' value='5 mins' class="form-control" name='time'>
+                                <option value='5'>5 mins</option>
+                                <option value='10'>10 mins</option>
+                                <option value='15'>15 mins</option>
+                                <option value='25'>25 mins</option>
+                                <option value='30'>30 mins</option>
+                                <option value='1'>1 hr</option>
+                            </select>
+                        
+                            <button @click='createKey()' class='CTA btn btn-default pull-right'>Create key</button>
+                        </div>
+                        
+                        <div v-if='keys.length !== 0' style='border: 2px dashed #ddd' class="bin col-md-4 col-xs-6 col-md-offset-1 col-xs-offset-3">
+                            <h2 class='text-center'>Active Keys</h2>
+                            <div @click='goto(openkey.url)' v-for='openkey in keys' class='key'>
+                                <div>
+                                    <small class="lead">
+                                        <i>Available for {{ openkey.time === '1' ? '1 hour' : `${openkey.time} mins`  }}</i>
+                                    </small>
+                                </div>
+                                <p v-if="openkey.proto === 'https:'" id='HTTPS' class="lead pull-right">{{ openkey.proto }}</p>
+                                <p v-else="openkey.proto === 'http:' || key.proto === ''" id='HTTP' class="lead pull-right">{{ openkey.proto }}</p>
+                                <h3>
+                                    <strong>
+                                        <a class='lead' :href="openkey.url">{{ openkey.key }}</a>
+                                    </strong>
+                                </h3>
+                                <button v-if='!openkey.reported' @click='sendReport(openkey.key)' :id='openkey._id' class='btn btn-report'>report</button>
+                            </div>
+                        </div>
+                        <div v-else="keys.length === 0" style='border-bottom: 2px dashed #ddd' class="col-xs-5 col-md-4 col-xs-offset-3 col-md-offset-1">
+                            <h2 class='text-center'>No Active keys </h2>
+                        </div>
+                        </div>
+                    </div>
+                    
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
