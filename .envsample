@@ -7,6 +7,6 @@ HOST=http://localhost:8000
 BUNDLE=./dist
 
 # postgres connection string
-CONNECTION_STRING=postgresql://postgres:password@localhost:5432/postgres?connect_timeout=10&sslmode=disable
+CONNECTION_STRING=postgresql://postgres:password@localhost:5432/postgres
 
 GITHUB_API_KEY=

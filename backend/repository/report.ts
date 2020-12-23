@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+} from 'typeorm';
+
+// entities
 import { Key } from './key';
 
 @Entity({ name: 'reports' })
@@ -6,12 +14,16 @@ export class Report {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany((type) => Key, (key) => key.id)
-  key_id: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'report_id' })
+  reportId: string;
+
+  @Column({ name: 'key_id', nullable: false })
+  @OneToOne((type) => Key)
+  keyId: number;
 
   @Column({ type: 'text' })
   message: string;
 
-  @Column({ type: 'time with time zone', nullable: false })
+  @CreateDateColumn({ nullable: false })
   created_at: Date;
 }

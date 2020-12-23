@@ -6,8 +6,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "start:dev": "ENV='dev' nodemon build/index.js",
-    "server:build": "tsc --project tsconfig.json",
-    "server:build:watch": "tsc -w --project tsconfig.json",
+    "server:build": "rm -rf build && tsc --project tsconfig.json",
+    "server:build:watch": "rm -rf build && tsc -w --project tsconfig.json",
     "front:build": "webpack --mode=production --colors --display-error-details --config webpack.config.js",
     "front:build:watch": "NODE_ENV=dev webpack --mode=development --progress --colors --display-error-details --watch --config webpack.config.js",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
@@ -31,10 +31,14 @@
     "@babel/preset-env": "7.4.2",
     "@babel/preset-react": "7.0.0",
     "@types/body-parser": "1.19.0",
+    "@types/date-fns": "2.6.0",
     "@types/express": "4.17.9",
+    "@types/joi": "14.3.4",
     "@types/node": "^8.0.29",
+    "@types/node-fetch": "2.5.7",
     "@types/superagent": "4.1.10",
     "@types/winston": "2.4.4",
+    "ava": "3.14.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
     "babel-loader": "8.0.5",
@@ -46,17 +50,18 @@
     "sass": "1.30.0",
     "sass-loader": "10.1.0",
     "style-loader": "0.23.1",
+    "ts-node": "3.3.0",
     "typescript": "3.3.3333",
     "webpack": "4.43.0",
-    "webpack-cli": "3.1.0",
-    "ts-node": "3.3.0"
+    "webpack-cli": "3.1.0"
   },
   "dependencies": {
     "body-parser": "1.19.0",
+    "date-fns": "2.16.1",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "immer": "8.0.0",
-    "mysql": "^2.14.1",
+    "joi": "17.3.0",
     "node-fetch": "2.6.1",
     "pg": "8.5.1",
     "react": "16.13.1",
@@ -69,7 +74,7 @@
     "styled-components": "5.2.1",
     "superagent": "6.1.0",
     "ts-node": "^9.1.1",
-    "typeorm": "0.2.29",
+    "typeorm": "0.2.25",
     "winston": "3.3.3"
   }
 }

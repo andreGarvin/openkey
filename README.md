@@ -10,7 +10,7 @@ A replica of `shoutkey.com` some of the same exact functionality
 
 - version@3.0.0
 
-  - Backend is running on Node version 15.4.0
+  - Backend is running on Node version 10.15.0
   - Node backend is written in typescript
   - no longer using MonogoDB, switched to PostgreSQL
   - no longer using VueJS, now using ReactJS with redux & react-router
@@ -21,6 +21,7 @@ A replica of `shoutkey.com` some of the same exact functionality
   - Proper API documentation using swagger open API 3
 
 - version@2.0.0
+
   - report bad key/url
   - show weather a website secured with SSL. ( ex: https<secure> or http<not secure> )
   - open sourced API

@@ -1,34 +1,39 @@
 import * as express from 'express';
 
+// routes
+import Feedback from './feedback/routes';
 import Version from './version/routes';
 import Health from './health/routes';
-import App from './app/routes';
+import Key from './key/routes';
 
-import logger from '../common/logger';
+// utils
+import { MakeJsonResponse } from '../common/json-response';
+import { MakeError } from '../common/service-error';
 
 const router = express.Router();
 
 // api routes
+router.use('/api/feedback', Feedback);
 router.use('/api/version', Version);
 router.use('/api/health', Health);
-router.use('/api/key', App);
+router.use('/api/key', Key);
 
+// if no api endpoint was mtached
 router.use('/api', (req: express.Request, res: express.Response) => {
-  return res.status(404).json({
-    error: 'api ednpoint not found',
-  });
+  const err = MakeError('api ednpoint not found', 'NOT_FOUND_ERROR', 404);
+  return res.status(404).json(MakeJsonResponse(undefined, err));
 });
 
+// application endpoint
 router.get('/', (req: express.Request, res: express.Response) => {
-  throw new Error('hello world');
-  return res.send('React App');
   // res.sendFile('index.html');
+  return res.send('React App');
 });
 
+// any other route will just return the application
 router.get('*', (req: express.Request, res: express.Response) => {
-  logger.debug('redirecting to app route');
-
-  return res.redirect('/');
+  // res.sendFile('index.html');
+  return res.send('React App');
 });
 
 export default router;
