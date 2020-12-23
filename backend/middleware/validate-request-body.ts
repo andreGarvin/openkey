@@ -1,9 +1,11 @@
 import * as express from 'express';
 import * as joi from 'joi';
 
+// utils
 import { MakeValidationError } from '../common/service-error';
 import { MakeJsonResponse } from '../common/json-response';
 
+// this validates any json request body
 export default (schema: joi.ObjectSchema<any>): express.RequestHandler => {
   return (
     req: express.Request,

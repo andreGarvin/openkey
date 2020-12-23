@@ -12,7 +12,7 @@ const app = express();
 import logger from './common/logger';
 import connection from './common/db';
 
-// middleware
+// middlewares
 import ErrorHandler from './middleware/error-handler';
 
 // queries
@@ -22,6 +22,7 @@ import { RemoveExpiredKeys } from './routes/key/queries';
 import Route from './routes';
 
 const PORT = process.env.PORT || 8000;
+const cleanupInterval = 300000;
 
 // middleware
 app.use(express.static(path.resolve(__dirname, process.env.BUNDLE)));
@@ -32,7 +33,7 @@ app.use('/', Route);
 
 app.use(ErrorHandler());
 
-// connecting to the database and then start the server
+// connecting to the database
 connection()
   .then(() => {
     // deletes any expired key every 5 minutes
@@ -41,8 +42,9 @@ connection()
         console.error(e);
         process.exit(e);
       });
-    }, 300000);
+    }, cleanupInterval);
 
+    // only starting the server if sucessfully connected to the database
     app.listen(PORT, () => logger.info(`Server running on PORT ${PORT}`));
   })
   .catch(logger.error);

@@ -1,6 +1,7 @@
 import * as express from 'express';
 
-import { FormError, MakeError, ServiceError } from '../common/service-error';
+// utils
+import { FormError, ServiceError } from '../common/service-error';
 import { MakeJsonResponse } from '../common/json-response';
 import logger from '../common/logger';
 

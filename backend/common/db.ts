@@ -1,5 +1,6 @@
 import { createConnection } from 'typeorm';
 
+// entities
 import { Report } from '../repository/report';
 import { Key } from '../repository/key';
 

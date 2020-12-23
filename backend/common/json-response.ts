@@ -1,14 +1,16 @@
 import { ServiceError } from './service-error';
 
-interface JsonResponse {
+// json response for all api responses
+interface jsonResponse {
   error: ServiceError;
   response: any;
 }
 
+// creates the json repsonse
 export const MakeJsonResponse = (
   resp: any,
   err?: ServiceError
-): JsonResponse => {
+): jsonResponse => {
   const jsonResponse = {
     error: null,
     response: null,
