@@ -1,0 +1,404 @@
+openapi: 3.0.0
+servers:
+  - description: OpenKey API documentation
+    url: https://openkey.herokuapp.com
+  - description: OpenKey API documentation
+    url: http://localhost:8000
+info:
+  description: OpenKey API documentation
+  version: 1.0.0
+  title: OpenKey API
+tags:
+  - name: key
+    description: This holds all the endpoints for managing keys
+
+paths:
+  /api/health:
+    get:
+      summary: regular service health route
+      description: regular service health route
+      parameters:
+        - in: query
+          name: heavy
+          description: This will preform a heavy health check
+          schema:
+            type: string
+            example: true
+      responses:
+        '200':
+          description: Successfully preformed a health check
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckResponse'
+        '424':
+          description: Successfully preformed a health check
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JSONErrorResponse'
+              example:
+                response: null
+                error:
+                  code: 'FAILED_DEPENDENCY_EXCEPTION'
+                  http_status: 424
+                  message: 'dependency failed'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorJSONResponse'
+  /api/docs:
+    get:
+      summary: api swagger docs
+      description: api swagger docs
+      responses:
+        '200':
+          description: this endpoint shows the swagger docs for the servcie
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorJSONResponse'
+  /api/version:
+    get:
+      summary: shows which version of service is running
+      description: shows which version of service is running, this is a production sanity check
+      responses:
+        '200':
+          description: Successfully preformed a health check
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+  /api/feedback:
+    post:
+      summary: creates a new issue on github
+      description: creates a new issue on github
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFeedbackInfo'
+      responses:
+        '201':
+          description: Successfully assigned the alias to the url and was stored in the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewFeedbackResponse'
+        '400':
+          description: |
+            This returns back the standard JSON error response with a code
+            - INVALID_DATA_ERROR: Invalid data or failed to create the key
+            - FAILED_TO_SEND_FEEDBACK_ERROR: somethign went wrong send the http request to github api
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JSONErrorResponse'
+              example:
+                response: null
+                error:
+                  code: 'FAILED_TO_SEND_FEEDBACK_ERROR'
+                  http_status: 400
+                  message: 'failed to send request to create new issue...'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorJSONResponse'
+  /api/key/create:
+    post:
+      tags:
+        - key
+      summary: creates a alias for the URL
+      description: creates a alias for the URL and returns the inrformation about the URL
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewKeyInfo'
+      responses:
+        '201':
+          description: Successfully assigned the alias to the url and was stored in the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewKeyInfoResponse'
+        '400':
+          description: |
+            This returns back the standard JSON error response with a code
+            - INVALID_DATA_ERROR: Invalid data or failed to create the key
+            - CONNECTION_ERROR: the url is broken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JSONErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorJSONResponse'
+  /api/key/info/{alias}:
+    get:
+      tags:
+        - key
+      summary: retrieves the info of URL based on the alias provided
+      description: retrieves the info of URL based on the alias provided
+      parameters:
+        - $ref: '#/components/parameters/alias'
+      responses:
+        '200':
+          description: Successfully returned the URL information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewKeyInfoResponse'
+        '404':
+          description: the alias for the key is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JSONErrorResponse'
+              example:
+                response: null
+                error:
+                  code: 'ALIAS_NOT_FOUND_ERROR'
+                  http_status: 404
+                  message: 'KEY_NOT_FOUND_ERROR'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorJSONResponse'
+  /api/key/report/{alias}:
+    delete:
+      tags:
+        - key
+      summary: reports a alias
+      description: reports a alias and if the alias has more then 10 reports it will be removed
+      parameters:
+        - $ref: '#/components/parameters/alias'
+      responses:
+        '200':
+          description: Successfully sent a report or deleted a alias
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewKeyInfoResponse'
+        '404':
+          description: the alias for the key is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JSONErrorResponse'
+              example:
+                response: null
+                error:
+                  code: 'ALIAS_NOT_FOUND_ERROR'
+                  http_status: 404
+                  message: 'KEY_NOT_FOUND_ERROR'
+        '400':
+          description: |
+            This returns back the standard JSON error response with a code
+            - INVALID_DATA_ERROR: Invalid data or failed to create the key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JSONErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorJSONResponse'
+
+components:
+  parameters:
+    alias:
+      required: true
+      in: path
+      name: alias
+      description: the alias assigned to the url
+      example: fake
+      schema:
+        type: string
+        minimum: 1
+
+  schemas:
+    HealthCheckResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          example:
+            message: everthing is running
+        error:
+          nullable: true
+          example: null
+
+    VersionResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            app_name:
+              type: string
+            commit_sha:
+              type: string
+              description: this is the git commit hsa of the app that is deployed onto production
+          example:
+            app_name: 'openkey'
+            commit_sha: 2371a06
+        error:
+          nullable: true
+          example: null
+
+    NewKeyInfo:
+      type: object
+      required:
+        - url
+        - expiration
+      example:
+        url: http://foobarbaz.com
+        expiration: 5
+      properties:
+        url:
+          type: string
+          example: http://foobarbaz.com
+          description: the URL you want to be shortened
+        expiration:
+          type: number
+          example: 5
+          description: the number of minutes you want the URL to be available for. this can be between 5 to 60 mins
+
+    NewFeedbackInfo:
+      type: object
+      required:
+        - label
+        - message
+      example:
+        message: I hate this app
+        label: feedback
+      properties:
+        message:
+          type: string
+          description: the message you want to send as your feedback
+        label:
+          type: string
+          description: the kind of feedback you will be making
+
+    NewFeedbackResponse:
+      type: object
+      example:
+        response:
+          number: 3
+          url: https://github.com/andreGarvin/openkey/issues/3
+        error: null
+      properties:
+        response:
+          type: object
+          properties:
+            url:
+              type: string
+              description: the URL to the issue on github
+            number:
+              type: number
+              description: the issue that was created for the issue
+        error:
+          nullable: true
+
+    NewKeyInfoResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            alias:
+              type: string
+              example: fake
+            created_at:
+              type: string
+              format: date-time
+              example: '2020-12-23T10:05:44.116Z'
+            expires_at:
+              type: string
+              format: date-time
+              example: '2020-12-23T05:10:44.112Z'
+            url:
+              $ref: '#/components/schemas/URLInfo'
+        error:
+          nullable: true
+          example: null
+
+    URLInfo:
+      type: object
+      properties:
+        secure:
+          type: boolean
+          description: weather or not the URL using a secure connection
+          example: true
+        href:
+          type: string
+          description: the URL provided
+          example: https://foorbarbaz.com
+        redirects:
+          type: string
+          description: the final redirect URL of the site
+          example: https://google.com
+        favcion:
+          type: string
+          description: the sites favicon
+          example: https://foobarbaz.com/favicon.co
+
+    JSONErrorResponse:
+      type: object
+      properties:
+        response:
+          nullable: true
+          example: null
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: the error code used to define the problem
+              example: FAILED_TO_CREATE_KEY
+            message:
+              type: string
+              description: the error message returned
+              example: failed to create a new key and return URL information
+            http_status:
+              type: number
+              description: http status code that was returned
+              example: 400
+
+    InternalServerErrorJSONResponse:
+      type: object
+      properties:
+        response:
+          nullable: true
+          example: null
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: the error code used to define the problem
+            message:
+              type: string
+              description: the error message returned
+            http_status:
+              type: number
+              description: http status code that was returned
+          example:
+            code: 'INTERNAL_SERVER_ERROR'
+            http_status: 500
+            message: 'something went wrong, this incident has been ackownledged'

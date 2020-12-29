@@ -1,4 +1,8 @@
+import * as path from 'path';
+
+import * as swaggerUi from 'swagger-ui-express';
 import * as express from 'express';
+import * as YAML from 'yamljs';
 
 // routes
 import Feedback from './feedback/routes';
@@ -11,8 +15,12 @@ import { MakeJsonResponse } from '../common/json-response';
 import { MakeError } from '../common/service-error';
 
 const router = express.Router();
+const documentation = YAML.load(
+  path.join(__dirname, '..', '..', 'swagger.yaml')
+);
 
 // api routes
+router.use('/api/docs', swaggerUi.serve, swaggerUi.setup(documentation));
 router.use('/api/feedback', Feedback);
 router.use('/api/version', Version);
 router.use('/api/health', Health);

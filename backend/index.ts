@@ -4,6 +4,7 @@ dotenv.config();
 
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import * as helmet from 'helmet';
 import * as path from 'path';
 
 const app = express();
@@ -26,7 +27,11 @@ const cleanupInterval = 300000;
 
 // middleware
 app.use(express.static(path.resolve(__dirname, process.env.BUNDLE)));
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(helmet());
 
 // routes
 app.use('/', Route);

@@ -23,7 +23,6 @@ import {
 
 enum KeyErrorCode {
   CONNECTION_ERROR = 'CONNECTION_ERROR_',
-  KEY_NOT_FOUND_ERROR = 'KEY_NOT_FOUND_ERROR',
   ALIAS_NOT_FOUND_ERROR = 'ALIAS_NOT_FOUND_ERROR',
 }
 
@@ -33,7 +32,7 @@ export const Get = async (alias: string): Promise<KeyInfoResponse> => {
   if (!key) {
     throw MakeError(
       'key does not exist',
-      KeyErrorCode.KEY_NOT_FOUND_ERROR,
+      KeyErrorCode.ALIAS_NOT_FOUND_ERROR,
       404
     );
   }
@@ -72,7 +71,11 @@ export const Create = async (newKey: NewKeyInfo): Promise<KeyInfoResponse> => {
   } catch (e) {
     logger.error(e);
 
-    throw FormError(e);
+    if (e instanceof Error) {
+      throw FormError(e);
+    }
+
+    throw e;
   }
 };
 
@@ -86,7 +89,7 @@ export const Report = async (
     if (keyId === -1) {
       throw MakeError(
         'key does not exist',
-        KeyErrorCode.KEY_NOT_FOUND_ERROR,
+        KeyErrorCode.ALIAS_NOT_FOUND_ERROR,
         404
       );
     }
@@ -103,7 +106,11 @@ export const Report = async (
   } catch (e) {
     logger.error(e);
 
-    throw FormError(e);
+    if (e instanceof Error) {
+      throw FormError(e);
+    }
+
+    throw e;
   }
 };
 
@@ -131,6 +138,7 @@ const getURLReport = async (href: string): Promise<URLReport> => {
   try {
     const response = await fetch(href, {
       method: 'GET',
+      timeout: 10000,
       redirect: 'manual',
     });
 
@@ -147,7 +155,7 @@ const getURLReport = async (href: string): Promise<URLReport> => {
       secure: url.protocol === 'https:',
     };
   } catch (e) {
-    if (e.code === 'ECONNREFUSED') {
+    if (e.type === 'request-timeout' || e.code === 'ECONNREFUSED') {
       throw MakeError(
         'failed create a status check on the site, this could be that the site is down or the domain is no longer in service',
         KeyErrorCode.CONNECTION_ERROR,
@@ -157,7 +165,11 @@ const getURLReport = async (href: string): Promise<URLReport> => {
 
     logger.error(e);
 
-    throw FormError(e);
+    if (e instanceof Error) {
+      throw FormError(e);
+    }
+
+    throw e;
   }
 };
 
@@ -180,140 +192,10 @@ const getAliases = async (): Promise<string[]> => {
   } catch (e) {
     logger.error(e);
 
-    throw FormError(e);
+    if (e instanceof Error) {
+      throw FormError(e);
+    }
+
+    throw e;
   }
 };
-
-// app.get('/api/fetch_keys', (req, res) => {
-//     mongo.connect(MONGO_URL, (err, client) => {
-//         assert.equal(err, null);
-
-//         const db = client.db('openkey')
-//         db.collection('keys').find({}).toArray((err, collection) => {
-//             return res.json({
-//                 keys: collection,
-//                 status: 'OK'
-//             })
-//         })
-//     })
-// })
-
-// app.get('/api/fetch_key', (req, res) => {
-//     const queryKey = req.query.key
-
-//     mongo.connect(MONGO_URL, (err, client) => {
-//         assert.equal(err, null);
-
-//         const db = client.db('openkey')
-//         db.collection('keys').findOne({ key: queryKey })
-//             .then(doc => {
-//                 if (doc === null) {
-//                     return res.json({
-//                         errorMessage: `Key '${queryKey}' does not exist or has expired.`,
-//                         status: 'NULL'
-//                     })
-//                 }
-
-//                 res.json({
-//                     key: doc,
-//                     status: 'OK'
-//                 })
-//             })
-//     })
-// })
-
-// app.post('/api/create_key', ({ query }, res) => {
-
-//     mongo.connect(MONGO_URL, (err, client) => {
-//         assert.equal(err, null);
-
-//         const db = client.db('openkey')
-//         const newKey = {
-//             url,
-//             time,
-//             proto: new URL(url).protocol
-//         };
-
-//         async function createAliasName(words) {
-//             let randWord = words[Math.floor(Math.random() * words.length)]
-//             const document = await db.collection('keys').findOne({ key: randWord })
-//             while (document !== null) {
-//                 randWord = words[Math.floor(Math.random() * words.length)]
-//             }
-//             return randWord.length === 2 ? randWord.split(' ')[0] : randWord;
-//         }
-//         async function checkAndInsert(newKey) {
-//             const document = await db.collection('keys').findOne({ url: newKey.url })
-//             if (document === null) {
-//                 const { data } = await axios.get('https://randomwordgenerator.com/json/words.json')
-//                 newKey.key = await createAliasName(data.data.map(i => i.word))
-//                 return await db.collection('keys').insertOne(newKey)
-//             }
-//             return {
-//                 errorMessage: 'This key url already exists',
-//                 key: document,
-//             }
-//         }
-
-//         checkAndInsert(newKey)
-//             .then(resp => {
-//                 if (resp.errorMessage !== undefined) {
-//                     return res.json({
-//                         ...resp,
-//                         status: 'NULL'
-//                     })
-//                 }
-//                 return res.json(newKey)
-//             })
-
-//         let expirationTime = time !== '1' ? (parseInt(time) * 60000) : 10 * 60000;
-//         setTimeout(() => {
-//             async function deleteKeyAndReport(url) {
-//                 const document = await db.collection('keys').findOne({ url })
-//                 await db.collection('reports').deleteOne({ key: document.key })
-//                 await db.collection('keys').deleteOne({ key: document.key })
-//             }
-
-//             deleteKeyAndReport(newKey.url)
-//                 .then(() => console.log(`deleted ${newKey.url}`))
-//                 .catch(err => {
-//                     console.error(err)
-//                     process.exit()
-//                 })
-//         }, expirationTime)
-//     })
-// })
-
-// app.post('/api/report_key', (req, res) => {
-//     const { body } = req
-
-//     mongo.connect(MONGO_URL, (err, client) => {
-//         assert.equal(err, null)
-//         const db = client.db('openkey')
-
-//         async function checkReportAndDelete(report) {
-//             const collection = await db.collection('reports').findOne({ key: report.key })
-//             if (collection !== null) {
-//                 if (collection.count >= 6) {
-//                     return await db.collection('reports').deleteOne({
-//                         key: report.key
-//                     })
-//                 }
-//                 return await db.collection('reports').updateOne({
-//                     key: report.key
-//                 }, {
-//                     $set: {
-//                         count: collection.count + 1
-//                     }
-//                 })
-//             }
-
-//             return await db.collection('reports').insertOne(Object.assign(report, {
-//                 count: 1
-//             }))
-//         }
-
-//         checkReportAndDelete(body)
-//             .then(() => res.sendStatus(200))
-//     })
-// })
