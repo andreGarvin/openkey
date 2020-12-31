@@ -16,7 +16,7 @@ export default (schema: joi.ObjectSchema<any>): express.RequestHandler => {
     if (error) {
       const err = MakeValidationError(error);
 
-      res.status(200).json(MakeJsonResponse(err));
+      res.status(400).json(MakeJsonResponse(undefined, err));
       return;
     }
 

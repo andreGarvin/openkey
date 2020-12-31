@@ -20,9 +20,10 @@ import {
   GetReportCount,
   DeleteKeyAndAllReports,
 } from './queries';
+import e = require('express');
 
 enum KeyErrorCode {
-  CONNECTION_ERROR = 'CONNECTION_ERROR_',
+  CONNECTION_ERROR = 'CONNECTION_ERROR',
   ALIAS_NOT_FOUND_ERROR = 'ALIAS_NOT_FOUND_ERROR',
 }
 
@@ -123,7 +124,6 @@ const formatKeyData = (key: KeyInfo): KeyInfoResponse => {
       href: key.url,
       secure: key.secure,
       redirects: key.redirect,
-      favicon: key.url + '/favicon.ico',
     },
   };
 };
@@ -136,6 +136,11 @@ const redirectStatusCodes = [301, 302, 303, 307, 308];
 
 const getURLReport = async (href: string): Promise<URLReport> => {
   try {
+    const report = {
+      secure: false,
+      redirected: '',
+    };
+
     const response = await fetch(href, {
       method: 'GET',
       timeout: 10000,
@@ -143,17 +148,21 @@ const getURLReport = async (href: string): Promise<URLReport> => {
     });
 
     const redirected = redirectStatusCodes.includes(response.status);
-    let finalURL = response.url;
+
     if (redirected) {
-      finalURL = response.headers.get('location');
+      const redirectURL = response.headers.get('location');
+
+      const url = new URL(redirectURL);
+
+      report.redirected = url.href;
+      report.secure = url.protocol === 'https:';
+    } else {
+      const url = new URL(response.url);
+
+      report.secure = url.protocol === 'https:';
     }
 
-    const url = new URL(finalURL);
-
-    return {
-      redirected: url.href,
-      secure: url.protocol === 'https:',
-    };
+    return report;
   } catch (e) {
     if (e.type === 'request-timeout' || e.code === 'ECONNREFUSED') {
       throw MakeError(
@@ -165,11 +174,7 @@ const getURLReport = async (href: string): Promise<URLReport> => {
 
     logger.error(e);
 
-    if (e instanceof Error) {
-      throw FormError(e);
-    }
-
-    throw e;
+    throw FormError(e);
   }
 };
 

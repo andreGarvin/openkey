@@ -1,10 +1,26 @@
-import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { render } from 'react-dom';
+import React from 'react';
 
-class App extends Component {
-    render() {
-        return (<h1>This is a react bolierplate starter app</h1>)
-    }
-}
+// components
+import App from './Components/App';
 
-render(<App />, document.getElementById('app'))
+// redux
+import store from './redux';
+
+import './styles/index.scss';
+
+const app = (
+  <BrowserRouter>
+    <Switch>
+      <Route path="/" component={App} />
+      <Route component={App} />
+    </Switch>
+  </BrowserRouter>
+);
+
+render(
+  <Provider store={store}>{app}</Provider>,
+  document.getElementById('app')
+);

@@ -18,6 +18,7 @@ const router = express.Router();
 const documentation = YAML.load(
   path.join(__dirname, '..', '..', 'swagger.yaml')
 );
+const bundle = path.resolve(__dirname, '..', '..', process.env.BUNDLE);
 
 // api routes
 router.use('/api/docs', swaggerUi.serve, swaggerUi.setup(documentation));
@@ -34,14 +35,12 @@ router.use('/api', (req: express.Request, res: express.Response) => {
 
 // application endpoint
 router.get('/', (req: express.Request, res: express.Response) => {
-  // res.sendFile('index.html');
-  return res.send('React App');
+  return res.sendFile(path.join(bundle, 'index.html'));
 });
 
 // any other route will just return the application
 router.get('*', (req: express.Request, res: express.Response) => {
-  // res.sendFile('index.html');
-  return res.send('React App');
+  return res.sendFile(path.join(bundle, 'index.html'));
 });
 
 export default router;

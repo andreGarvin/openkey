@@ -6,7 +6,6 @@ export interface KeyInfoResponse {
   url: {
     href: string;
     secure: boolean;
-    favicon: string;
     redirects?: string;
   };
 }

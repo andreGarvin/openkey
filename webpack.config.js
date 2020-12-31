@@ -5,12 +5,11 @@ const sassModule = require('sass');
 
 // webpack plugin modules
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin')
-
+const CleanPlugin = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 // project directory path
-const entryPath = resolve(__dirname, 'app');
+const entryPath = resolve(__dirname, 'public');
 const outPath = resolve(__dirname, 'dist');
 
 // config env vars
@@ -22,16 +21,16 @@ const PathsToClean = ['dist'];
 
 // the clean options to use
 const CleanOptions = {
-  verbose: PRODUCTION ? false : true
+  verbose: PRODUCTION ? false : true,
 };
 
 // config plugins
 const WebpackConfigPlugins = [
   new MiniCssExtractPlugin({
-    mode: PRODUCTION ? 'production': 'dev',
+    mode: PRODUCTION ? 'production' : 'dev',
     filename: 'bundle.css',
   }),
-  new CleanWebpackPlugin(
+  new CleanPlugin(
     // the path(s) that should be cleaned
     PathsToClean,
     // the clean options to use
@@ -39,7 +38,7 @@ const WebpackConfigPlugins = [
   ),
   new CopyPlugin({
     patterns: [
-      { 
+      {
         from: resolve(entryPath, 'index.html'),
       },
     ],
@@ -60,13 +59,13 @@ const WebpackRules = [
           '@babel/env',
           {
             targets: {
-              node: '6.11.2'
-            }
-          }
+              node: '6.11.2',
+            },
+          },
         ],
-        '@babel/react'
-      ]
-    }
+        '@babel/react',
+      ],
+    },
   },
   {
     test: /\.(sc|c)ss$/,
@@ -81,8 +80,8 @@ const WebpackRules = [
           implementation: sassModule,
         },
       },
-    ]
-  }
+    ],
+  },
 ];
 
 module.exports = {
@@ -95,6 +94,6 @@ module.exports = {
     filename: 'bundle.js',
   },
   module: {
-    rules: WebpackRules
-  }
-}
+    rules: WebpackRules,
+  },
+};

@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 8000;
 const cleanupInterval = 300000;
 
 // middleware
-app.use(express.static(path.resolve(__dirname, process.env.BUNDLE)));
+app.use(express.static(path.resolve(__dirname, '..', process.env.BUNDLE)));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

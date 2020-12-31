@@ -4,7 +4,7 @@
   "description": "This is a shoutkey.com replica",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node build/index.js",
     "start:dev": "ENV='dev' nodemon build/index.js",
     "server:build": "rm -rf build && tsc --project tsconfig.json",
     "server:build:watch": "rm -rf build && tsc -w --project tsconfig.json",
