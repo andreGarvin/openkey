@@ -30,7 +30,7 @@ RUN npm run frontend:build
 ARG COMMIT_SHA
 ENV COMMIT_SHA $COMMIT_SHA
 
-ENV BUNDLE ../dist
+ENV BUNDLE dist
 
 ENV IS_DOCKER_CONTAINER true
 
