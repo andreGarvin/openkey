@@ -1,0 +1,20 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15.0
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: deploy
+          command: |
+            COMMIT_SHA=$(git rev-parse --short HEAD)
+
+            sudo curl https://cli-assets.heroku.com/install.sh | sh
+
+            heroku container:login
+
+            heroku container:push -a openkey --context-path . --arg COMMIT_SHA=$COMMIT_SHA web
+            heroku container:release -a openkey web
