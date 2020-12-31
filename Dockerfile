@@ -23,10 +23,8 @@ RUN npm run server:build
 FROM base AS frontend
 COPY --from=dependencies /app/node_modules /app/node_modules
 COPY ./webpack.config.js .
+COPY ./public ./public
 COPY ./package.json .
-COPY ./public .
-RUN ls
-RUN pwd
 RUN npm run frontend:build
 
 ARG COMMIT_SHA
