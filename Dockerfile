@@ -14,9 +14,9 @@ RUN npm install
 # building the backend
 FROM base AS backend
 COPY --from=dependencies /app/node_modules /app/node_modules
+COPY ./backend ./backend
 COPY ./tsconfig.json .
 COPY ./package.json .
-COPY ./backend .
 RUN npm run server:build
 
 # building frontend
@@ -39,6 +39,7 @@ COPY --from=dependencies /app/prod_node_modules /app/node_modules
 COPY --from=dependencies /app/package.json /app/package.json
 COPY --from=backend /app/build /app/build
 COPY --from=frontend /app/dist /app/dist
+COPY ./swagger.yaml /app/swagger.yaml
 
 # exposing the container port
 EXPOSE 8000
