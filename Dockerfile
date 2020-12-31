@@ -25,6 +25,8 @@ COPY --from=dependencies /app/node_modules /app/node_modules
 COPY ./webpack.config.js .
 COPY ./package.json .
 COPY ./public .
+RUN ls
+RUN pwd
 RUN npm run frontend:build
 
 ARG COMMIT_SHA
