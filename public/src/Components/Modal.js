@@ -2,6 +2,10 @@ import style from 'styled-components';
 import React from 'react';
 
 const Modal = style.div`
+  position: absolute;
+  // display: ${(props) => (props.open ? '' : 'none')};
+  visibility: ${(props) => (props.open ? 'visible' : 'hidden')};
+
   .mask {
     top: 0;
     left: 0;
@@ -21,88 +25,66 @@ const Modal = style.div`
     position: fixed;
   }
 
-  .modal .mini-select > div {
-    border: 0;
-    width: 55px;
-    border-radius: 0;
-    border-bottom: 1px solid #ddd;
-  }
-
   .modal .main {
-    // width: 520px;
-    top: 50%;
+    top: 25%;
     left: 50%;
-    width: 600px;
+    width: 575px;
     display: flex;
-    height: 320px;
+    padding: 20px;
+    display: flex;
     position: fixed;
     border-radius: 4px;
     flex-direction: column;
     background-color: #ffffff;
     transform: translate(-50%, -50%);
     box-shadow: 0 16px 24px rgba(0, 0, 0, 0.2);
+    height: ${(props) => props.height || '320px'};
   }
-
-  // .modal > .main .header {
-  //   display: flex;
-  //   flex-direction: row;
-  //   padding: 20px 20px 5px 20px;
-  //   justify-content: space-between;
-  //   border-bottom: 2px solid #f1f1f1;
-  // }
-
-  // .modal > .main .header h2 {
-  //   margin: 0;
-  //   font-size: 22px;
-  //   font-weight: 700;
-  //   text-transform: capitalize;
-  //   color: rgba(24, 24, 24, 0.68);
-  // }
-
-  // .modal > .main .header .icon {
-  //   width: 14px;
-  //   height: 14px;
-  // }
-
-  // .modal > .main .header .icon g g path {
-  //   opacity: 0.54;
-  //   color: #181818;
-  //   fill: currentColor;
-  // }
-
-  // .modal > .main .forum {
-  //   height: 82%;
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: space-evenly;
-  // }
-
-  // .modal > .main .forum input {
-  //   border: 0;
-  //   width: 60%;
-  //   width: 60%;
-  //   font-size: 16px;
-  //   font-weight: 400;
-  //   color: #181818;
-  //   padding-bottom: 5px;
-  //   text-transform: capitalize;
-  //   border-bottom: 1px solid #ddd;
-  // }
-
-  // .modal > .main .forum .button {
-  //   background-color: $yellow;
-  // }
-
-  // .modal-select {
-  //   z-index: 1057;
-  // }
-
-  // .modal > .main .forum .ant-select-selection__rendered {
-  //   display: flex;
-  //   align-items: center;
-  // }
 `;
 
-export default () => {
-  return <Modal className="modal"></Modal>;
+export const Header = style.div`
+  font-size: 26px;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+
+  h3 {
+    margin: 0;
+  }
+`;
+
+export const Form = style.div`
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Footer = style.div`
+  flex: 1;
+  display: flex;
+  align-items: end;
+  flex-direction: row;
+  justify-content: flex-end;
+  
+  .cancel {
+    margin-top: 0;
+    font-size: 18px;
+    margin-right: 15px;
+  }
+`;
+
+export const FormSentence = style.div`
+  opacity: 0.8;
+  font-size: 18px;
+  margin-bottom: 10px;
+`;
+
+export default (props) => {
+  return (
+    <Modal open={props.open} height={props.height} className="modal">
+      <div className="mask" onClick={() => props.onModalClose(false)}></div>
+      <div className="modal">
+        <div className="main">{props.children}</div>
+      </div>
+    </Modal>
+  );
 };

@@ -7,6 +7,7 @@ import { connection as connect } from '../../redux';
 
 // components
 import Container from './style';
+import LinkStyle from '../Link';
 import Button from '../Button';
 
 const ExtendedContainer = style(Container)`
@@ -30,22 +31,13 @@ const ExtendedContainer = style(Container)`
     flex-direction: row;
   }
   
-  .main span p, .main span a {
+  .main span > p, .main span > a {
     margin-left: 8px;
     font-weight: lighter;
   }
   
-  .main a, .footer p {
-    color: #0cb8e2;
-    font-size: 18px;
-    cursor: pointer;
-    letter-spacing: 1.2px;
-    text-transform: lowercase;
-    text-decoration: underline;
-
-    &:hover {
-      color: #0098be;
-    }
+  .main span a p, .footer p {
+    margin-top: 0;
   }
 
   .footer {
@@ -108,7 +100,7 @@ const card = ({ info }) => {
             rel="noopener noreferrer"
             href={url.protocol + url.hostname}
           >
-            {url.hostname}
+            <LinkStyle noCapitalization>{url.hostname}</LinkStyle>
           </a>
         </span>
         <span>
@@ -119,7 +111,7 @@ const card = ({ info }) => {
               rel="noopener noreferrer"
               href={info.url.redirects}
             >
-              {info.url.redirects}
+              <LinkStyle noCapitalization>{info.url.redirects}</LinkStyle>
             </a>
           ) : (
             <NoRedirectText>none</NoRedirectText>
@@ -135,8 +127,8 @@ const card = ({ info }) => {
 
       <div className="footer">
         <div>
-          <p>share</p>
-          <p>report</p>
+          <LinkStyle>share</LinkStyle>
+          <LinkStyle>report</LinkStyle>
         </div>
         <div>
           <a target="_blank" rel="noopener noreferrer" href={info.url.href}>
