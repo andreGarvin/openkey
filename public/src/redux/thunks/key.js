@@ -1,8 +1,8 @@
 import { key } from '../actions';
 
 // thunks
+import { removeNotification, setErrorNotification } from './notification';
 import { setFormError } from './form-error';
-import { setError } from './error';
 
 import * as navigate from './navigate';
 
@@ -27,13 +27,14 @@ export function createKey(url, expiration) {
         delete jsonErrorResponse.errors;
       }
 
-      dispatch(setError(jsonErrorResponse));
+      dispatch(setErrorNotification(jsonErrorResponse));
       return;
     }
 
     const newKey = (await response.json()).response;
 
     dispatch(navigate.setNavigation(`/view/${newKey.alias}`));
+    dispatch(removeNotification());
   };
 }
 
@@ -49,7 +50,7 @@ export function getKeyInfo(alias) {
     if (!response.ok) {
       const jsonErrorResponse = (await response.json()).error;
 
-      dispatch(setError(jsonErrorResponse));
+      dispatch(setErrorNotification(jsonErrorResponse));
       return;
     }
 

@@ -27,7 +27,7 @@ const view = ({ state, match, dispatch }) => {
         <NotificationBanner />
 
         <Container className="container">
-          <Card info={key} dispatch={dispatch} />
+          <Card info={key} />
           <Footer />
         </Container>
       </Main>

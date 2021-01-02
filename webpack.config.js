@@ -83,7 +83,7 @@ const WebpackRules = [
     ],
   },
 ];
-console.log(resolve(entryPath, 'src', 'index.js'));
+
 module.exports = {
   plugins: WebpackConfigPlugins,
   mode: PRODUCTION ? 'production' : 'development',

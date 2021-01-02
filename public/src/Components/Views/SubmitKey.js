@@ -1,7 +1,7 @@
 import React from 'react';
 
 // components
-import ErrorBanner from '../ErrorBanner';
+import NotificationBanner from '../NotificationBanner';
 import Card from '../Card/SubmitKeyCard';
 import Footer from '../Footer';
 
@@ -12,7 +12,7 @@ export default () => {
   return (
     <React.Fragment>
       <Main className="main submit">
-        <ErrorBanner />
+        <NotificationBanner />
 
         <Container className="container">
           <Card />

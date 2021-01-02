@@ -1,22 +1,22 @@
 import produce from 'immer';
 
 const initialState = {
-  response: undefined,
+  payload: {},
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case 'SET_ERROR': {
+    case 'SET_NOTIFICATION': {
       return produce(state, (draftState) => {
-        draftState.response = payload;
+        draftState.payload = payload;
       });
     }
 
-    case 'REMOVE_ERROR': {
+    case 'REMOVE_NOTIFICATION': {
       return produce(state, (draftState) => {
-        draftState.response = undefined;
+        draftState.payload = {};
       });
     }
 

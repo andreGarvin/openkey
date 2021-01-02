@@ -7,6 +7,7 @@ import * as navigate from '../redux/thunks/navigate';
 import { connection as connect } from '../redux';
 
 // components
+import TransportView from './Views/TransportView';
 import SubmitKeyView from './Views/SubmitKey';
 import KeyInfoView from './Views/KeyInfo';
 import Header from './Header';
@@ -39,7 +40,7 @@ const App = ({ state, history, dispatch }) => {
 
         <Route path="/view/:alias" component={KeyInfoView} />
 
-        {/* <Route path="/:alias" component={TransportView} /> */}
+        <Route path="/:alias" component={TransportView} />
       </Switch>
     </ApplicationContainer>
   );

@@ -1,6 +1,6 @@
-export const error = {
-  SET_ERROR: 'SET_ERROR',
-  REMOVE_ERROR: 'REMOVE_ERROR',
+export const notification = {
+  SET_NOTIFICATION: 'SET_NOTIFICATION',
+  REMOVE_NOTIFICATION: 'REMOVE_NOTIFICATION',
 };
 
 export const formError = {

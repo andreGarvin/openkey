@@ -2,10 +2,11 @@ import style from 'styled-components';
 import React from 'react';
 
 // redux
+import { setNotification } from '../../redux/thunks/notification';
 // import { sendReport } from '../../redux/thunks/report';
-import { connection as connect } from '../../redux';
 
 // components
+import CopyToClipboard from '../CopyToClipboard';
 import Container from './style';
 import LinkStyle from '../Link';
 import Button from '../Button';
@@ -84,7 +85,7 @@ const NoRedirectText = style.p`
   font-style: italic;
 `;
 
-const card = ({ info }) => {
+const card = ({ info, dispatch }) => {
   if (!info) return null;
 
   const url = new URL(info.url.href);
@@ -127,7 +128,19 @@ const card = ({ info }) => {
 
       <div className="footer">
         <div>
-          <LinkStyle>share</LinkStyle>
+          <CopyToClipboard
+            content={info.url.href}
+            onClick={() =>
+              dispatch(
+                setNotification({
+                  type: 'success',
+                  content: <p>copied short url link to clipboard</p>,
+                })
+              )
+            }
+          >
+            <LinkStyle>share</LinkStyle>
+          </CopyToClipboard>
           <LinkStyle>report</LinkStyle>
         </div>
         <div>
@@ -140,4 +153,4 @@ const card = ({ info }) => {
   );
 };
 
-export default connect(card);
+export default card;
