@@ -27,10 +27,9 @@ const Banner = style.div`
     transition: max-height 0.3s ease-out;
     max-height: ${(props) => (props.show ? '45px' : '0')};
     background-color: ${(props) =>
-      props.type === 'error' ? '#f82c2c' : '#00af06'};
-    
+      props.type ? (props.type === 'error' ? '#f82c2c' : '#00af06') : ''}; 
   }
-    
+
   .content .wrapper {
     padding: 20px;
     display: flex;

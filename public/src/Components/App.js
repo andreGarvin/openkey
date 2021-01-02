@@ -28,7 +28,6 @@ const App = ({ state, history, dispatch }) => {
       history.push(path);
 
       dispatch(navigate.removeNavigation());
-      // return <Redirect to={path} />;
     }
   });
 

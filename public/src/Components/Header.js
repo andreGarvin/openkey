@@ -1,12 +1,17 @@
 import style from 'styled-components';
 import React from 'react';
 
+// redux
+import { getKeyInfo, getKeyInfoAndNaviagte } from '../redux/thunks/key';
+import { connection as connect } from '../redux';
+
 // components
 import Modal, { Form, Footer, Header as ModalHeader } from './Modal';
 import LinkStyle from './Link';
 import Button from './Button';
+import { removeNavigation, setNavigation } from '../redux/thunks/navigate';
 
-const Header = style.div`
+const HeaderContainer = style.div`
   height: 75px;
   display: flex;
   padding: 15px;
@@ -33,20 +38,33 @@ const Input = style.input`
   border: 1px solid #ddd;
 `;
 
-export default () => {
+const Header = ({ state, dispatch }) => {
   const [showModal, setShowModal] = React.useState(false);
+  const [alias, setAlias] = React.useState('');
+
+  React.useEffect(() => {
+    const key = state.key.response;
+    if (key) {
+      dispatch(setNavigation(`/view/${key.alias}`));
+      setShowModal(false);
+    }
+  }, [state.key.response]);
 
   return (
-    <Header className="header">
+    <HeaderContainer className="header">
       <a href="/">openkey</a>
 
       <Button onClick={() => setShowModal(true)}>enter key alias</Button>
+
       <Modal open={showModal} height="160px" onModalClose={setShowModal}>
         <ModalHeader className="header">
           <h3>enter the key alias</h3>
         </ModalHeader>
         <Form className="form">
-          <Input placeholder="enter alias" />
+          <Input
+            placeholder="enter alias"
+            onChange={(e) => setAlias(e.target.value)}
+          />
         </Form>
         <Footer className="footer">
           <LinkStyle
@@ -56,9 +74,18 @@ export default () => {
           >
             cancel
           </LinkStyle>
-          <Button>enter</Button>
+          <Button
+            onClick={() => {
+              dispatch(getKeyInfo(alias));
+              setAlias('');
+            }}
+          >
+            enter
+          </Button>
         </Footer>
       </Modal>
-    </Header>
+    </HeaderContainer>
   );
 };
+
+export default connect(Header);
