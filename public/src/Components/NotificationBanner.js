@@ -24,6 +24,8 @@ const Banner = style.div`
   .content {
     color: #fff;
     height: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
     transition: max-height 0.3s ease-out;
     max-height: ${(props) => (props.show ? '45px' : '0')};
     background-color: ${(props) =>
@@ -33,8 +35,10 @@ const Banner = style.div`
   .content .wrapper {
     padding: 20px;
     display: flex;
+    padding-top: 0;
     max-width: 100%;
-    font-size: 18px;
+    font-size: 14px;
+    padding-bottom: 0;
     flex-direction: row;
     justify-content: space-between;
     visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
@@ -46,9 +50,9 @@ export default connect(({ state, dispatch }) => {
 
   const { type = '', content = null } = payload;
 
-  setTimeout(() => {
-    dispatch(removeNotification());
-  }, 8000);
+  // setTimeout(() => {
+  //   dispatch(removeNotification());
+  // }, 9000);
 
   return (
     <Banner className="notification-banner" show={content} type={type}>

@@ -6,7 +6,7 @@ import { setFormError } from './form-error';
 
 import * as navigate from './navigate';
 
-const invalidDataErrorCode = 'INVALID_DATA_ERROR';
+import { invalidDataErrorCode } from './constant';
 
 export function createKey(url, expiration) {
   return async function (dispatch) {

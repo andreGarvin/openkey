@@ -22,7 +22,7 @@ export const Create = async (
     const response = await fetch(GitHubAPIURL, {
       method: 'POST',
       body: JSON.stringify({
-        title: `new ${feedback.label}`,
+        title: `New application ${feedback.label} report`,
         body: feedback.message,
         labels: [feedback.label],
       }),

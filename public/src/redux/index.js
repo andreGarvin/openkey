@@ -5,7 +5,6 @@ import thunk from 'redux-thunk';
 // reducers
 import notificationReducer from './reducers/notification';
 import formErrorReducer from './reducers/form-error';
-import feedbackReducer from './reducers/feedback';
 import navigateReducer from './reducers/navigate';
 import reportReducer from './reducers/report';
 import keyReducer from './reducers/key';
@@ -17,7 +16,6 @@ export default createStore(
     key: keyReducer,
     report: reportReducer,
     navigate: navigateReducer,
-    feedback: feedbackReducer,
     formError: formErrorReducer,
     notification: notificationReducer,
   }),

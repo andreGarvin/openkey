@@ -3,7 +3,6 @@ import React from 'react';
 
 const Modal = style.div`
   position: absolute;
-  // display: ${(props) => (props.open ? '' : 'none')};
   visibility: ${(props) => (props.open ? 'visible' : 'hidden')};
 
   .mask {
@@ -26,7 +25,7 @@ const Modal = style.div`
   }
 
   .modal .main {
-    top: 25%;
+    top: 45%;
     left: 50%;
     width: 575px;
     display: flex;

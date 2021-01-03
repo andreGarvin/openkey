@@ -21,7 +21,3 @@ export const key = {
 export const report = {
   ADD_REPORT: 'ADD_REPORT',
 };
-
-export const feedback = {
-  ADD_FEEDBACK: 'ADD_FEEDBACK',
-};

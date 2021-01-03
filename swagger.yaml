@@ -353,10 +353,6 @@ components:
           type: string
           description: the final redirect URL of the site
           example: https://google.com
-        favcion:
-          type: string
-          description: the sites favicon
-          example: https://foobarbaz.com/favicon.co
 
     JSONErrorResponse:
       type: object

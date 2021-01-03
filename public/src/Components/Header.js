@@ -2,14 +2,16 @@ import style from 'styled-components';
 import React from 'react';
 
 // redux
-import { getKeyInfo, getKeyInfoAndNaviagte } from '../redux/thunks/key';
+import { removeFormError, setFormError } from '../redux/thunks/form-error';
+import { setNavigation } from '../redux/thunks/navigate';
 import { connection as connect } from '../redux';
+import { getKeyInfo } from '../redux/thunks/key';
 
 // components
 import Modal, { Form, Footer, Header as ModalHeader } from './Modal';
+import FormError from './FormError';
 import LinkStyle from './Link';
 import Button from './Button';
-import { removeNavigation, setNavigation } from '../redux/thunks/navigate';
 
 const HeaderContainer = style.div`
   height: 75px;
@@ -42,6 +44,8 @@ const Header = ({ state, dispatch }) => {
   const [showModal, setShowModal] = React.useState(false);
   const [alias, setAlias] = React.useState('');
 
+  const { formError } = state;
+
   React.useEffect(() => {
     const key = state.key.response;
     if (key) {
@@ -61,10 +65,17 @@ const Header = ({ state, dispatch }) => {
           <h3>enter the key alias</h3>
         </ModalHeader>
         <Form className="form">
-          <Input
-            placeholder="enter alias"
-            onChange={(e) => setAlias(e.target.value)}
-          />
+          <FormError fieldName="alias" formErrors={formError.response}>
+            <Input
+              name="alias"
+              placeholder="enter alias"
+              onChange={(e) => {
+                setAlias(e.target.value);
+
+                dispatch(removeFormError(e.target.name));
+              }}
+            />
+          </FormError>
         </Form>
         <Footer className="footer">
           <LinkStyle
@@ -76,8 +87,21 @@ const Header = ({ state, dispatch }) => {
           </LinkStyle>
           <Button
             onClick={() => {
-              dispatch(getKeyInfo(alias));
-              setAlias('');
+              if (alias) {
+                dispatch(getKeyInfo(alias));
+
+                setAlias('');
+              } else {
+                console.log('hello');
+                dispatch(
+                  setFormError([
+                    {
+                      field: 'alias',
+                      message: 'must provide a alias',
+                    },
+                  ])
+                );
+              }
             }}
           >
             enter
