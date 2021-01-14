@@ -8,8 +8,19 @@ import * as navigate from './navigate';
 
 import { invalidDataErrorCode } from './constant';
 
+function toggleLoading() {
+  return async function (dispatch) {
+    dispatch({
+      type: key.TOGGLE_LOADING,
+    });
+    return;
+  };
+}
+
 export function createKey(url, expiration) {
   return async function (dispatch) {
+    dispatch(toggleLoading());
+
     const response = await fetch('/api/key/create', {
       method: 'POST',
       body: JSON.stringify({ url, expiration }),
@@ -28,6 +39,7 @@ export function createKey(url, expiration) {
       }
 
       dispatch(setErrorNotification(jsonErrorResponse));
+      dispatch(toggleLoading());
       return;
     }
 
@@ -35,6 +47,7 @@ export function createKey(url, expiration) {
 
     dispatch(navigate.setNavigation(`/view/${newKey.alias}`));
     dispatch(removeNotification());
+    dispatch(toggleLoading());
   };
 }
 

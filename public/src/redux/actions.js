@@ -16,6 +16,7 @@ export const navigate = {
 
 export const key = {
   SET_KEY: 'SET_KEY',
+  TOGGLE_LOADING: 'TOGGLE_LOADING',
 };
 
 export const report = {

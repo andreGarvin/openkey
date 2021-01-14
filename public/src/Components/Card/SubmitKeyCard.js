@@ -53,7 +53,7 @@ const card = (props) => {
   const [expiration, setExpiration] = React.useState(5);
   const [url, setURL] = React.useState('');
 
-  const { formError } = props.state;
+  const { formError, key } = props.state;
 
   const selectOptions = () => {
     return [5, 10, 20, 30, 60].map((expiration) => {
@@ -103,7 +103,10 @@ const card = (props) => {
         </FormError>
       </CardFormContainer>
       <div className="footer">
-        <Button onClick={() => props.dispatch(createKey(url, expiration))}>
+        <Button
+          isLoading={key.loading}
+          onClick={() => props.dispatch(createKey(url, expiration))}
+        >
           create key
         </Button>
       </div>

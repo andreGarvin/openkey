@@ -36,14 +36,19 @@ const Select = style.select`
 
 const Feedback = ({ state, dispatch }) => {
   const [showModal, setShowModal] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [label, setLabel] = React.useState('feedback');
   const [message, setMessage] = React.useState('');
 
   const { formError, notification } = state;
 
   React.useEffect(() => {
-    if (notification.payload.type && notification.payload.type === 'success') {
+    if (notification.payload.type === 'success') {
       setShowModal(false);
+      setIsLoading(false);
+      setMessage('');
+    } else {
+      setIsLoading(false);
     }
   }, [notification.payload.type]);
 
@@ -93,7 +98,13 @@ const Feedback = ({ state, dispatch }) => {
           >
             cancel
           </LinkStyle>
-          <Button onClick={() => dispatch(sendFeedback(message, label))}>
+          <Button
+            isLoading={isLoading}
+            onClick={() => {
+              setIsLoading(true);
+              dispatch(sendFeedback(message, label));
+            }}
+          >
             send
           </Button>
         </Footer>

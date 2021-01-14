@@ -49,7 +49,7 @@ const ExtendedContainer = style(Container)`
     flex-direction: column;
   }
 
-  .footer div {
+  .footer > div {
     width: 100%;
     display: flex;
     flex-direction: row;
