@@ -27,7 +27,7 @@ router.use('/api/version', Version);
 router.use('/api/health', Health);
 router.use('/api/key', Key);
 
-// if no api endpoint was mtached
+// if no api endpoint was matched
 router.use('/api', (req: express.Request, res: express.Response) => {
   const err = MakeError('api ednpoint not found', 'NOT_FOUND_ERROR', 404);
   return res.status(404).json(MakeJsonResponse(undefined, err));
