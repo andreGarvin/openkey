@@ -12,7 +12,7 @@ export default async () => {
     entities: [Key, Report],
     url: process.env.CONNECTION_STRING,
     extra: {
-      ssl: true,
+      rejectUnauthorized: false,
     },
   });
 };
