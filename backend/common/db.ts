@@ -11,5 +11,8 @@ export default async () => {
     synchronize: true,
     entities: [Key, Report],
     url: process.env.CONNECTION_STRING,
+    extra: {
+      ssl: true,
+    },
   });
 };

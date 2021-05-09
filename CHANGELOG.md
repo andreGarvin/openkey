@@ -1,5 +1,9 @@
 # Change-log
 
+- [version@3.0.1](https://github.com/andreGarvin/openkey/tree/3.0.1)
+
+  - Fixed heroku database connection
+
 - [version@3.0.0](https://github.com/andreGarvin/openkey/tree/3.0.0)
 
   - Backend is running on Node version 10.15.0
