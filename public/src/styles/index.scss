@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  min-width: 790px;
+
+  h1,
+  p {
+    margin: 0;
+  }
+}
+
+body > #app {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: #f7f7fa;
+  font-family: 'Hind Siliguri', sans-serif;
+}
