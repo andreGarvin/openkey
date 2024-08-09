@@ -20,7 +20,6 @@ import {
   GetReportCount,
   DeleteKeyAndAllReports,
 } from './queries';
-import e = require('express');
 
 enum KeyErrorCode {
   CONNECTION_ERROR = 'CONNECTION_ERROR',
@@ -48,13 +47,12 @@ export const Create = async (newKey: NewKeyInfo): Promise<KeyInfoResponse> => {
     }
 
     const report = await getURLReport(newKey.url);
-    const aliases = await getAliases();
 
     let keyId: number = 0;
     let alias: string;
 
     do {
-      alias = aliases[Math.floor(Math.random() * aliases.length)];
+      alias = await getAliases();
       keyId = await KeyExist(alias);
     } while (keyId !== -1);
 
@@ -182,18 +180,28 @@ interface WordAPIResponse {
   data: { [key: string]: string }[];
 }
 
-const getAliases = async (): Promise<string[]> => {
+const getAliases = async (): Promise<string> => {
   try {
     const response = await fetch(
-      'https://randomwordgenerator.com/json/words.json',
+      'https://random-word-api.herokuapp.com/word',
       {
         method: 'GET',
       }
     );
 
-    const { data }: WordAPIResponse = await response.json();
+    if (response.status !== 200) {
+      logger.error(
+        'random word generator returned a non %s status code',
+        response.status
+      );
 
-    return data.map((w) => w.word);
+      console.log(await response.text());
+      throw MakeError('Could not create key', 'INTERNAL_SERVER_ERROR', 500);
+    }
+
+    const [word]: string[] = await response.json();
+
+    return word;
   } catch (e) {
     logger.error(e);
 

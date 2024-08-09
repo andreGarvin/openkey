@@ -13,7 +13,7 @@
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "db:launch": "docker run --name openkey -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres",
     "db:restart": "docker restart openkey",
-    "db:destory": "docker rm openkey",
+    "db:destroy": "docker rm openkey",
     "db:stop": "docker stop openkey"
   },
   "repository": {
