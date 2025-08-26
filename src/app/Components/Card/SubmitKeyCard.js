@@ -1,11 +1,6 @@
 import style from 'styled-components';
 import React from 'react';
 
-// redux
-import { removeFormError } from '../../redux/thunks/form-error';
-import { connection as connect } from '../../redux';
-import { createKey } from '../../redux/thunks/key';
-
 // components
 import FormError from '../FormError';
 import Container from './style';
@@ -24,7 +19,7 @@ const CardFormContainer = style.div`
     margin-bottom: 5px;
     text-transform: capitalize;
   }
-  
+
   label::after {
     content: ':';
   }
@@ -53,8 +48,6 @@ const card = (props) => {
   const [expiration, setExpiration] = React.useState(5);
   const [url, setURL] = React.useState('');
 
-  const { formError, key } = props.state;
-
   const selectOptions = () => {
     return [5, 10, 20, 30, 60].map((expiration) => {
       return (
@@ -68,32 +61,33 @@ const card = (props) => {
   return (
     <Container className="card">
       <CardFormContainer className="form">
-        <FormError fieldName="url" formErrors={formError.response}>
+        <FormError fieldName="url">
           <CardFormInput
             name="url"
             className="input"
             placeholder="enter URL"
             onChange={(e) => {
-              props.dispatch(removeFormError(e.target.name));
+
 
               setURL(e.target.value);
             }}
             onKeyDown={(e) => {
               if (e.key.toLowerCase() === 'enter') {
-                props.dispatch(createKey(url, expiration));
+
               }
             }}
           />
         </FormError>
 
         <label>expiration</label>
-        <FormError fieldName="expiration" formErrors={formError.response}>
+        <FormError fieldName="expiration"
+        >
           <CardFormSelect
             name="expiration"
             defaultValue="5"
             className="select"
             onChange={(e) => {
-              props.dispatch(removeFormError(e.target.name));
+
 
               setExpiration(parseInt(e.target.value, 10));
             }}
@@ -104,8 +98,8 @@ const card = (props) => {
       </CardFormContainer>
       <div className="footer">
         <Button
-          isLoading={key.loading}
-          onClick={() => props.dispatch(createKey(url, expiration))}
+          isLoading={false}
+          // onClick={() => createKey(url, expiration)}
         >
           create key
         </Button>
@@ -114,4 +108,4 @@ const card = (props) => {
   );
 };
 
-export default connect(card);
+export default card;

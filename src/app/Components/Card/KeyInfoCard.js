@@ -1,9 +1,4 @@
 import style from 'styled-components';
-import React from 'react';
-
-// redux
-import { setNotification } from '../../redux/thunks/notification';
-// import { sendReport } from '../../redux/thunks/report';
 
 // components
 import CopyToClipboard from '../CopyToClipboard';
@@ -16,7 +11,7 @@ const ExtendedContainer = style(Container)`
     flex: 1;
     padding: 20px;
   }
-  
+
   .main h3 {
     margin: 0;
     font-size: 35px;
@@ -24,19 +19,19 @@ const ExtendedContainer = style(Container)`
     text-align: center;
     margin-bottom: 20px;
   }
-  
+
   .main span {
     display: flex;
     font-size: 20px;
     font-weight: bold;
     flex-direction: row;
   }
-  
+
   .main span > p, .main span > a {
     margin-left: 8px;
     font-weight: lighter;
   }
-  
+
   .main span a p, .footer p {
     margin-top: 0;
   }
@@ -56,7 +51,7 @@ const ExtendedContainer = style(Container)`
     padding-bottom: 10px;
     justify-content: center;
   }
-  
+
   .footer div p:first-child {
     margin-right: 13px;
   }
@@ -68,7 +63,7 @@ const ExtendedContainer = style(Container)`
     text-decoration: none;
     flex-direction: column;
   }
-  
+
   .footer a .button {
     width: 100%;
     font-size: 17px;
@@ -85,7 +80,7 @@ const NoRedirectText = style.p`
   font-style: italic;
 `;
 
-const card = ({ info, dispatch }) => {
+const card = ({ info }) => {
   if (!info) return null;
 
   const url = new URL(info.url.href);
@@ -130,14 +125,7 @@ const card = ({ info, dispatch }) => {
         <div>
           <CopyToClipboard
             content={info.url.href}
-            onClick={() =>
-              dispatch(
-                setNotification({
-                  type: 'success',
-                  content: <p>copied short url link to clipboard</p>,
-                })
-              )
-            }
+            onClick={() => {}}
           >
             <LinkStyle>share</LinkStyle>
           </CopyToClipboard>

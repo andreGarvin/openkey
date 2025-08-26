@@ -1,12 +1,6 @@
 import style from 'styled-components';
 import React from 'react';
 
-// redux
-import { removeFormError, setFormError } from '../redux/thunks/form-error';
-import { setNavigation } from '../redux/thunks/navigate';
-import { connection as connect } from '../redux';
-import { getKeyInfo } from '../redux/thunks/key';
-
 // components
 import Modal, { Form, Footer, Header as ModalHeader } from './Modal';
 import FormError from './FormError';
@@ -40,19 +34,17 @@ const Input = style.input`
   border: 1px solid #ddd;
 `;
 
-const Header = ({ state, dispatch }) => {
+const Header = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [alias, setAlias] = React.useState('');
 
-  const { formError } = state;
-
-  React.useEffect(() => {
-    const key = state.key.response;
-    if (key) {
-      dispatch(setNavigation(`/view/${key.alias}`));
-      setShowModal(false);
-    }
-  }, [state.key.response]);
+  // React.useEffect(() => {
+  //   const key = state.key.response;
+  //   if (key) {
+  //     dispatch(setNavigation(`/view/${key.alias}`));
+  //     setShowModal(false);
+  //   }
+  // }, [state.key.response]);
 
   return (
     <HeaderContainer className="header">
@@ -65,14 +57,14 @@ const Header = ({ state, dispatch }) => {
           <h3>enter the key alias</h3>
         </ModalHeader>
         <Form className="form">
-          <FormError fieldName="alias" formErrors={formError.response}>
+          <FormError fieldName="alias"
+
+          >
             <Input
               name="alias"
               placeholder="enter alias"
               onChange={(e) => {
                 setAlias(e.target.value);
-
-                dispatch(removeFormError(e.target.name));
               }}
             />
           </FormError>
@@ -88,19 +80,8 @@ const Header = ({ state, dispatch }) => {
           <Button
             onClick={() => {
               if (alias) {
-                dispatch(getKeyInfo(alias));
-
                 setAlias('');
               } else {
-                console.log('hello');
-                dispatch(
-                  setFormError([
-                    {
-                      field: 'alias',
-                      message: 'must provide a alias',
-                    },
-                  ])
-                );
               }
             }}
           >
@@ -112,4 +93,4 @@ const Header = ({ state, dispatch }) => {
   );
 };
 
-export default connect(Header);
+export default Header;

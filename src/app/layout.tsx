@@ -1,5 +1,6 @@
 import "src/app/globals.css";
 
+import style from "styled-components";
 import { Metadata } from "next";
 
 import Head from 'next/head';
@@ -28,7 +29,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="en">
       <Head>
@@ -43,11 +43,7 @@ export default async function RootLayout({
         />
       </Head>
       <body className="h-screen bg-white">
-        <div className="bg-white w-full md:h-screen flex flex-col justify-center items-center">
-          <div className="h-full w-full">
-            {children}
-          </div>
-        </div>
+        {children}
       </body>
     </html>
   );

@@ -1,11 +1,6 @@
 import style from 'styled-components';
 import React from 'react';
 
-// redux
-import { removeFormError } from '../redux/thunks/form-error';
-import { sendFeedback } from '../redux/thunks/feedback';
-import { connection as connect } from '../redux';
-
 // components
 import Modal, { Form, Footer, Header, FormSentence } from './Modal';
 import FormError from './FormError';
@@ -34,13 +29,12 @@ const Select = style.select`
   margin-bottom: 11px;
 `;
 
-const Feedback = ({ state, dispatch }) => {
+const Feedback = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [label, setLabel] = React.useState('feedback');
   const [message, setMessage] = React.useState('');
 
-  const { formError, notification } = state;
 
   React.useEffect(() => {
     if (notification.payload.type === 'success') {
@@ -68,7 +62,6 @@ const Feedback = ({ state, dispatch }) => {
               onChange={(e) => {
                 setLabel(e.target.value);
 
-                dispatch(removeFormError(e.target.name));
               }}
             >
               <option value="feedback">feedback</option>
@@ -85,7 +78,6 @@ const Feedback = ({ state, dispatch }) => {
               onChange={(e) => {
                 setMessage(e.target.value);
 
-                dispatch(removeFormError(e.target.name));
               }}
             />
           </FormError>
@@ -102,7 +94,6 @@ const Feedback = ({ state, dispatch }) => {
             isLoading={isLoading}
             onClick={() => {
               setIsLoading(true);
-              dispatch(sendFeedback(message, label));
             }}
           >
             send
@@ -113,4 +104,4 @@ const Feedback = ({ state, dispatch }) => {
   );
 };
 
-export default connect(Feedback);
+export default Feedback;
