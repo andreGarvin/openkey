@@ -1,47 +1,42 @@
+FROM node:18-alpine AS base
 
-FROM node:10.15.0-alpine as base
 WORKDIR /app
 
-# installing dependencies
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV APP_NAME=openkey
+ENV PORT=3000
+
+# install dependencies
 FROM base AS dependencies
-COPY ./package.json .
-COPY ./package-lock.json .
+COPY package.json package-lock.json ./
 RUN npm set progress=false
-RUN npm install --production
+RUN npm install --omit=dev
 RUN cp -R node_modules prod_node_modules
 RUN npm install
 
-# building the backend
-FROM base AS backend
+# build app
+FROM base AS build
 COPY --from=dependencies /app/node_modules /app/node_modules
-COPY ./backend ./backend
-COPY ./tsconfig.json .
-COPY ./package.json .
-RUN npm run server:build
+COPY . /app
+RUN npm run build
 
-# building frontend
-FROM base AS frontend
+# development release
+FROM base AS development
+COPY . .
 COPY --from=dependencies /app/node_modules /app/node_modules
-COPY ./webpack.config.js .
-COPY ./public ./public
-COPY ./package.json .
-RUN npm run frontend:build
 
-ARG COMMIT_SHA
-ENV COMMIT_SHA $COMMIT_SHA
+EXPOSE 3000
 
-ENV BUNDLE dist
+CMD ["npm", "run", "dev"]
 
-ENV IS_DOCKER_CONTAINER true
-
-# copying any resoruces needed
+# production release
+FROM base AS production
 COPY --from=dependencies /app/prod_node_modules /app/node_modules
 COPY --from=dependencies /app/package.json /app/package.json
-COPY --from=backend /app/build /app/build
-COPY --from=frontend /app/dist /app/dist
-COPY ./swagger.yaml /app/swagger.yaml
+COPY --from=build /app/next.config.js /app/next.config.js
+COPY --from=build /app/build /app/build
 
-# exposing the container port
-EXPOSE 8000
+EXPOSE 3000
 
+# Running the app
 CMD ["npm", "run", "start"]
