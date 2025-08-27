@@ -1,9 +1,8 @@
 import style from 'styled-components';
-import React from 'react';
 
 // components
-import FeedBack from './Feedback';
-import LinkStyle from './Link';
+// import FeedBack from './Feedback';
+import LinkStyle from 'src/app/Components/Link';
 
 const FooterContainer = style.div`
   height: 30px;
@@ -36,7 +35,7 @@ export default () => {
       >
         <LinkStyle>gitHub</LinkStyle>
       </a>
-      <FeedBack />
+      {/* <FeedBack /> */}
     </FooterContainer>
   );
 };

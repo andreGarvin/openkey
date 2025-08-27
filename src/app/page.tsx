@@ -1,7 +1,22 @@
+"use client";
+
+// components
+import Card from "src/app/Components/Card/SubmitKeyCard";
+import Footer from "src/app/Components/Footer";
+import Header from 'src/app/Components/Header';
+
+// styles
+import { Main, Container } from "src/app/Components/Views/style";
+
 export default async function Page(props) {
   return (
-    <>
-      <p className="font-bold text-5xl capitalize">hello world</p>
-    </>
+    <Main className="main submit">
+      <Header />
+
+      <Container className="container">
+        <Card />
+        <Footer />
+      </Container>
+    </Main>
   );
 }
