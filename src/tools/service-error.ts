@@ -1,56 +1,44 @@
-import joi from 'joi';
-
-const INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR';
-const STATUS_CODE = 500;
-
-// joi validation error response
-interface validateErrorMessage {
-  field: string;
+export type ServiceError = {
+  name: string;
   message: string;
+};
+
+// enum error codes
+enum ErrorCodes {
+  InternalServerError = "INTERNAL_SERVER_ERROR",
 }
 
-// api json error response
-export interface ServiceError {
-  code: string;
-  message: string;
-  http_status: number;
-  // if the error response is froma  joi validatione error
-  errors?: validateErrorMessage[];
-}
+export const InternalServiceError = CreateServiceError(
+    ErrorCodes.InternalServerError,
+    "internal server error"
+  ),
+  InvalidError = CreateServiceError(
+    "InvalidRequest",
+    "Invalid request was made."
+  );
 
-// creates standard error response for all api json responses
-export const MakeError = (
-  message: string,
-  code: string,
-  httpStatus: number
-): ServiceError => {
+export function CreateServiceError(
+  name: string,
+  message: string
+): ServiceError {
   return {
-    code,
+    name,
     message,
-    http_status: httpStatus,
   };
-};
+}
 
-// creates a error response from a runtine error
-export const FormError = (error: Error): ServiceError => {
-  return {
-    http_status: STATUS_CODE,
-    code: INTERNAL_SERVER_ERROR,
-    message: 'something went wrong, this incident has been ackownledged',
-  };
-};
+export class ServiceErrors {
+  private errors: ServiceError[];
 
-// creates the validation error response
-export const MakeValidationError = (err: joi.ValidationError): ServiceError => {
-  const errs: validateErrorMessage[] = err.details.map((e) => ({
-    message: e.message,
-    field: e?.context?.key as string,
-  }));
+  constructor() {
+    this.errors = [];
+  }
 
-  return {
-    errors: errs,
-    http_status: 400,
-    message: 'invalid data',
-    code: 'INVALID_DATA_ERROR',
-  };
-};
+  getErrors() {
+    return this.errors;
+  }
+
+  append(error: Error | ServiceError) {
+    this.errors.push(CreateServiceError(error.name, error.message));
+  }
+}
