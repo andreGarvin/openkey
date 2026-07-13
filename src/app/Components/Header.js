@@ -81,7 +81,6 @@ const Header = () => {
             onClick={() => {
               if (alias) {
                 setAlias('');
-              } else {
               }
             }}
           >
