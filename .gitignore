@@ -1,7 +1,10 @@
-.notes
+.DS_Store
+
 .vscode
+
 node_modules
 build
-dist
-.env
-.DS_Store
+
+.env.local
+
+.notes

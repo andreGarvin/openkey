@@ -23,9 +23,9 @@ Here is the [change log](https://github.com/andreGarvin/openkey/blob/3.0.0/CHANG
 
 You need these three things to ensure compatibility when working locally.
 
-- NodeJS version 10.15.0
-- PostgreSQL version 12.13
-- Docker version 19.03.5
+- NodeJS version 18.17.0
+- PostgreSQL version 16.4
+- Docker version  27.1.1
 
 ## Getting Started
 
